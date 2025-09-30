@@ -1,0 +1,7 @@
+version: '3'
+
+includes:
+  default:
+    taskfile: ./tooling/task/Taskfile.yml
+    dir: .
+    flatten: true

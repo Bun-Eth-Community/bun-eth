@@ -3,18 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "compile": "bun hardhat compile",
-    "deploy": "bun hardhat run scripts/deploy.ts --network localhost",
-    "deploy:sepolia": "bun hardhat run scripts/deploy.ts --network sepolia",
-    "test": "bun hardhat test",
-    "node": "bun hardhat node"
-  },
-  "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "@types/node": "^20.14.0",
-    "hardhat": "^2.22.0"
-  },
-  "dependencies": {
-    "@openzeppelin/contracts": "^5.0.2"
+    "compile": "forge build",
+    "deploy": "forge script script/Deploy.s.sol:DeployScript --rpc-url http://localhost:8545 --broadcast --legacy",
+    "deploy:sepolia": "forge script script/Deploy.s.sol:DeployScript --rpc-url $SEPOLIA_RPC_URL --broadcast --verify",
+    "test": "forge test -vv",
+    "node": "anvil"
   }
 }

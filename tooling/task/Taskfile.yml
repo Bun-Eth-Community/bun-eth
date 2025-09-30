@@ -1,5 +1,7 @@
 version: '3'
 
+dotenv: ['.env']
+
 vars:
   DOCKER_COMPOSE_FILE: ./docker/docker-compose.yml
 
@@ -12,19 +14,19 @@ tasks:
 
   # Development
   dev:up:
-    desc: Start local development stack (API + Hardhat node)
+    desc: Start local development stack (API + Anvil node)
     cmds:
       - docker compose -f {{.DOCKER_COMPOSE_FILE}} up --build -d
-      - echo "🚀 Development stack started"
-      - echo "📡 Hardhat node: http://localhost:8545"
-      - echo "🌐 API: http://localhost:3001"
-      - echo "📊 Health check: http://localhost:3001/health"
+      - echo "Development stack started"
+      - echo "Anvil node at http://localhost:8545"
+      - echo "API at http://localhost:3001"
+      - echo "Health check at http://localhost:3001/health"
 
   dev:down:
     desc: Stop local development stack
     cmds:
       - docker compose -f {{.DOCKER_COMPOSE_FILE}} down -v
-      - echo "🛑 Development stack stopped"
+      - echo "Development stack stopped"
 
   dev:logs:
     desc: View logs from development stack
@@ -36,10 +38,10 @@ tasks:
     cmds:
       - docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f api
 
-  dev:logs:hardhat:
-    desc: View Hardhat node logs
+  dev:logs:anvil:
+    desc: View Anvil node logs
     cmds:
-      - docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f hardhat
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f anvil
 
   dev:restart:
     desc: Restart development stack
@@ -52,31 +54,31 @@ tasks:
     desc: Compile smart contracts
     dir: packages/contracts
     cmds:
-      - bun hardhat compile
+      - forge build
 
   contracts:deploy:
     desc: Deploy contracts to local network
     dir: packages/contracts
     cmds:
-      - bun hardhat run scripts/deploy.ts --network localhost
+      - forge script script/Deploy.s.sol:DeployScript --rpc-url http://localhost:8545 --broadcast --legacy
 
   contracts:deploy:sepolia:
     desc: Deploy contracts to Sepolia testnet
     dir: packages/contracts
     cmds:
-      - bun hardhat run scripts/deploy.ts --network sepolia
+      - forge script script/Deploy.s.sol:DeployScript --rpc-url ${SEPOLIA_RPC_URL} --broadcast --verify
 
   contracts:test:
     desc: Run contract tests
     dir: packages/contracts
     cmds:
-      - bun hardhat test
+      - forge test -vv
 
   contracts:node:
-    desc: Run standalone Hardhat node
+    desc: Run standalone Anvil node
     dir: packages/contracts
     cmds:
-      - bun hardhat node
+      - anvil
 
   # Building
   build:
@@ -144,21 +146,21 @@ tasks:
       - rm -rf packages/contracts/artifacts
       - rm -rf packages/contracts/cache
       - rm -rf packages/contracts/typechain-types
-      - echo "🧹 Cleaned all build artifacts"
+      - echo "Cleaned all build artifacts"
 
   clean:cache:
     desc: Clean Hardhat cache and artifacts
     dir: packages/contracts
     cmds:
       - rm -rf artifacts cache typechain-types
-      - echo "🧹 Cleaned contract artifacts"
+      - echo "Cleaned contract artifacts"
 
   # Database/State management
   db:reset:
     desc: Reset local blockchain state
     cmds:
       - task: dev:down
-      - echo "🔄 Blockchain state reset"
+      - echo "Blockchain state reset"
 
   # Utilities
   status:
@@ -179,11 +181,39 @@ tasks:
       - task: contracts:compile
       - task: dev:up
       - echo ""
-      - echo "✅ Bun-Eth is ready!"
-      - echo "🌐 API running at http://localhost:3001"
-      - echo "📡 Hardhat node at http://localhost:8545"
+      - echo "Bun-Eth is ready!"
+      - echo "API running at http://localhost:3001"
+      - echo "Anvil node at http://localhost:8545"
       - echo ""
       - echo "Next steps:"
-      - echo "  - Deploy contracts: task contracts:deploy"
-      - echo "  - Run tests: task test"
-      - echo "  - View logs: task dev:logs"
+      - echo "  - Deploy contracts with 'task contracts:deploy'"
+      - echo "  - Run tests with 'task test'"
+      - echo "  - View logs with 'task dev:logs'"
+
+  # Setup - full local setup with environment and tests
+  setup:
+    desc: Complete local setup - env, install, compile, and test
+    cmds:
+      - echo "Starting complete local setup..."
+      - |
+        if [ ! -f .env ]; then
+          echo "Creating .env from .env.example..."
+          cp .env.example .env
+          echo ".env created"
+        else
+          echo ".env already exists"
+        fi
+      - echo "Installing dependencies..."
+      - task: install
+      - echo "Compiling contracts..."
+      - task: contracts:compile
+      - echo "Running tests..."
+      - bun test packages/core packages/sdk
+      - task: contracts:test
+      - echo ""
+      - echo "Setup complete! All tests passing."
+      - echo ""
+      - echo "Next steps:"
+      - echo "  - Start dev stack with 'task dev:up'"
+      - echo "  - Deploy contracts with 'task contracts:deploy'"
+      - echo "  - Check API health with 'task check:health'"

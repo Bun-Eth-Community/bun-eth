@@ -3,7 +3,14 @@
     "allow": [
       "Bash(bun:*)",
       "Bash(mkdir:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(task:*)",
+      "Bash(bunx:*)",
+      "Bash(node:*)",
+      "Bash(npx hardhat:*)",
+      "WebSearch",
+      "Bash(forge:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

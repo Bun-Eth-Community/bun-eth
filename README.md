@@ -6,16 +6,16 @@
 [![Bun](https://img.shields.io/badge/Bun-1.1+-black)](https://bun.sh)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-blue)](https://www.typescriptlang.org/)
 
-A **pure Bun-native monorepo template** for building Ethereum-based applications. Replace scaffold-eth-2's Node/React stack with a modern, TypeScript-first approach using Bun, Elysia, and Hardhat.
+A **pure Bun-native monorepo template** for building Ethereum-based applications. Replace scaffold-eth-2's Node/React stack with a modern, TypeScript-first approach using Bun, Elysia, and Foundry.
 
 ## ✨ Features
 
-- 🚀 **Bun-Native** - 100% Bun, no Node.js tooling required
+- 🚀 **Bun-Native** - 100% Bun, no Node.js required
 - ⚡ **Elysia Backend** - Fast, TypeScript-first web framework
-- 📜 **Hardhat Contracts** - Battle-tested smart contract framework
-- 🐳 **Docker Compose** - Complete local development environment
+- 📜 **Foundry Contracts** - Blazing fast Rust-based smart contract framework
+- 🐳 **Docker Compose** - Complete local development environment with Anvil
 - 📦 **Monorepo** - Clean separation of concerns with workspaces
-- 🧪 **Bun Tests** - Native testing with `bun test`
+- 🧪 **Native Tests** - Bun tests for SDK/API, Solidity tests for contracts
 - 🔧 **Taskfile** - Powerful command orchestration
 - 🎨 **TypeScript** - Full type safety across the stack
 
@@ -26,8 +26,7 @@ A **pure Bun-native monorepo template** for building Ethereum-based applications
 ```bash
 bunx create-bun-eth@latest my-dapp
 cd my-dapp
-task install
-task dev:up
+task setup
 ```
 
 ### Manual Clone
@@ -35,13 +34,19 @@ task dev:up
 ```bash
 git clone https://github.com/yourusername/bun-eth.git my-dapp
 cd my-dapp
-task install
-task dev:up
+task setup
 ```
+
+The `setup` task will:
+- Create `.env` from `.env.example`
+- Install all dependencies
+- Compile smart contracts
+- Run all tests to verify everything works
 
 ## 📋 Prerequisites
 
 - [Bun](https://bun.sh) >= 1.1.0
+- [Foundry](https://getfoundry.sh/) (for smart contracts)
 - [Docker](https://www.docker.com/) (for local Ethereum node)
 - [Task](https://taskfile.dev/) (optional, for orchestration)
 
@@ -101,7 +106,7 @@ task dev:up
 ```
 
 This starts:
-- Hardhat local Ethereum node on `http://localhost:8545`
+- Anvil local Ethereum node on `http://localhost:8545`
 - Bun-Eth API on `http://localhost:3001`
 
 ### Stop Development Stack
@@ -119,8 +124,8 @@ task dev:logs
 # API only
 task dev:logs:api
 
-# Hardhat node only
-task dev:logs:hardhat
+# Anvil node only
+task dev:logs:anvil
 ```
 
 ## 📜 Smart Contracts
@@ -318,47 +323,49 @@ PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 CHAIN_ID=31337
 ```
 
-### Hardhat Networks
+### Foundry Networks
 
-Edit `packages/contracts/hardhat.config.ts`:
+Edit `packages/contracts/foundry.toml`:
 
-```typescript
-networks: {
-  hardhat: {
-    chainId: 31337,
-  },
-  localhost: {
-    url: "http://127.0.0.1:8545",
-  },
-  sepolia: {
-    url: process.env.SEPOLIA_RPC_URL,
-    accounts: [process.env.PRIVATE_KEY],
-  },
-}
+```toml
+[rpc_endpoints]
+localhost = "http://127.0.0.1:8545"
+sepolia = "${SEPOLIA_RPC_URL}"
 ```
 
 ## 📚 Available Tasks
 
-Run `task --list` to see all available commands:
+Run `task --list` to see all available commands.
+
+### Essential Commands
 
 ```bash
-task: Available tasks for this project:
-* build:                 Build all packages
-* check:health:          Check API health
-* clean:                 Clean build artifacts and dependencies
-* contracts:compile:     Compile smart contracts
-* contracts:deploy:      Deploy contracts to local network
-* contracts:test:        Run contract tests
-* dev:down:              Stop local development stack
-* dev:logs:              View logs from development stack
-* dev:restart:           Restart development stack
-* dev:up:                Start local development stack (API + Hardhat node)
-* install:               Install all dependencies
-* start:                 Quick start - install, compile, and run dev stack
-* status:                Show status of development stack
-* test:                  Run all tests
-* test:coverage:         Run tests with coverage
-* test:watch:            Run tests in watch mode
+# Setup - Complete local setup with tests
+task setup
+
+# Start - Quick start dev stack (install, compile, start services)
+task start
+
+# Development
+task dev:up              # Start local development stack
+task dev:down            # Stop local development stack
+task dev:logs            # View logs from all services
+
+# Contracts
+task contracts:compile   # Compile smart contracts
+task contracts:deploy    # Deploy to local network
+task contracts:test      # Run contract tests
+
+# Testing
+task test                # Run all tests
+task test:core           # Run core utility tests only
+task test:sdk            # Run SDK tests only
+task test:contracts      # Run contract tests only
+
+# Other
+task clean               # Clean build artifacts
+task status              # Show development stack status
+task check:health        # Check API health
 ```
 
 ## 🚢 Deployment
@@ -401,7 +408,7 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 - [Bun](https://bun.sh) - The blazingly fast JavaScript runtime
 - [Elysia](https://elysiajs.com) - Fast and ergonomic TypeScript web framework
-- [Hardhat](https://hardhat.org) - Ethereum development environment
+- [Foundry](https://getfoundry.sh) - Blazing fast Ethereum development toolkit
 - [scaffold-eth-2](https://github.com/scaffold-eth/scaffold-eth-2) - Inspiration
 
 ## 📞 Support
