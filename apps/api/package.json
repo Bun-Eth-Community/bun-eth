@@ -1,0 +1,19 @@
+{
+  "name": "@bun-eth/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "start": "bun src/index.ts",
+    "test": "bun test",
+    "build": "echo 'No build needed for Bun'"
+  },
+  "dependencies": {
+    "@bun-eth/core": "workspace:*",
+    "elysia": "^1.1.19",
+    "ethers": "^6.13.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.10"
+  }
+}

@@ -1,0 +1,189 @@
+version: '3'
+
+vars:
+  DOCKER_COMPOSE_FILE: ./docker/docker-compose.yml
+
+tasks:
+  # Installation
+  install:
+    desc: Install all dependencies
+    cmds:
+      - bun install
+
+  # Development
+  dev:up:
+    desc: Start local development stack (API + Hardhat node)
+    cmds:
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} up --build -d
+      - echo "🚀 Development stack started"
+      - echo "📡 Hardhat node: http://localhost:8545"
+      - echo "🌐 API: http://localhost:3001"
+      - echo "📊 Health check: http://localhost:3001/health"
+
+  dev:down:
+    desc: Stop local development stack
+    cmds:
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} down -v
+      - echo "🛑 Development stack stopped"
+
+  dev:logs:
+    desc: View logs from development stack
+    cmds:
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f
+
+  dev:logs:api:
+    desc: View API logs
+    cmds:
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f api
+
+  dev:logs:hardhat:
+    desc: View Hardhat node logs
+    cmds:
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f hardhat
+
+  dev:restart:
+    desc: Restart development stack
+    cmds:
+      - task: dev:down
+      - task: dev:up
+
+  # Contracts
+  contracts:compile:
+    desc: Compile smart contracts
+    dir: packages/contracts
+    cmds:
+      - bun hardhat compile
+
+  contracts:deploy:
+    desc: Deploy contracts to local network
+    dir: packages/contracts
+    cmds:
+      - bun hardhat run scripts/deploy.ts --network localhost
+
+  contracts:deploy:sepolia:
+    desc: Deploy contracts to Sepolia testnet
+    dir: packages/contracts
+    cmds:
+      - bun hardhat run scripts/deploy.ts --network sepolia
+
+  contracts:test:
+    desc: Run contract tests
+    dir: packages/contracts
+    cmds:
+      - bun hardhat test
+
+  contracts:node:
+    desc: Run standalone Hardhat node
+    dir: packages/contracts
+    cmds:
+      - bun hardhat node
+
+  # Building
+  build:
+    desc: Build all packages
+    cmds:
+      - bun run build
+
+  build:api:
+    desc: Build API (no-op for Bun)
+    cmds:
+      - echo "No build needed for Bun - TypeScript runs directly"
+
+  # Testing
+  test:
+    desc: Run all tests
+    cmds:
+      - bun test
+
+  test:watch:
+    desc: Run tests in watch mode
+    cmds:
+      - bun test --watch
+
+  test:coverage:
+    desc: Run tests with coverage
+    cmds:
+      - bun test --coverage
+
+  test:contracts:
+    desc: Run contract tests only
+    cmds:
+      - task: contracts:test
+
+  test:api:
+    desc: Run API tests
+    dir: apps/api
+    cmds:
+      - bun test
+
+  test:sdk:
+    desc: Run SDK tests
+    dir: packages/sdk
+    cmds:
+      - bun test
+
+  test:core:
+    desc: Run core tests
+    dir: packages/core
+    cmds:
+      - bun test
+
+  # Linting
+  lint:
+    desc: Lint all packages
+    cmds:
+      - bun run lint
+
+  # Cleaning
+  clean:
+    desc: Clean build artifacts and dependencies
+    cmds:
+      - rm -rf node_modules
+      - rm -rf apps/*/node_modules
+      - rm -rf packages/*/node_modules
+      - rm -rf packages/contracts/artifacts
+      - rm -rf packages/contracts/cache
+      - rm -rf packages/contracts/typechain-types
+      - echo "🧹 Cleaned all build artifacts"
+
+  clean:cache:
+    desc: Clean Hardhat cache and artifacts
+    dir: packages/contracts
+    cmds:
+      - rm -rf artifacts cache typechain-types
+      - echo "🧹 Cleaned contract artifacts"
+
+  # Database/State management
+  db:reset:
+    desc: Reset local blockchain state
+    cmds:
+      - task: dev:down
+      - echo "🔄 Blockchain state reset"
+
+  # Utilities
+  status:
+    desc: Show status of development stack
+    cmds:
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} ps
+
+  check:health:
+    desc: Check API health
+    cmds:
+      - curl -s http://localhost:3001/health | bun run -e "console.log(JSON.stringify(JSON.parse(await Bun.stdin.text()), null, 2))"
+
+  # Quick start
+  start:
+    desc: Quick start - install, compile, and run dev stack
+    cmds:
+      - task: install
+      - task: contracts:compile
+      - task: dev:up
+      - echo ""
+      - echo "✅ Bun-Eth is ready!"
+      - echo "🌐 API running at http://localhost:3001"
+      - echo "📡 Hardhat node at http://localhost:8545"
+      - echo ""
+      - echo "Next steps:"
+      - echo "  - Deploy contracts: task contracts:deploy"
+      - echo "  - Run tests: task test"
+      - echo "  - View logs: task dev:logs"

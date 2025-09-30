@@ -1,0 +1,46 @@
+# Bun
+node_modules/
+bun.lockb
+.bun/
+
+# Build outputs
+dist/
+build/
+*.js
+*.d.ts
+!hardhat.config.ts
+
+# Hardhat
+cache/
+artifacts/
+typechain-types/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Docker
+.dockerignore
+
+# Testing
+coverage/
+
+# Misc
+*.tsbuildinfo

@@ -1,0 +1,36 @@
+{
+  "name": "bun-eth",
+  "version": "0.1.0",
+  "description": "A Bun-first scaffold for Ethereum projects",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "bun run --filter './apps/*' --filter './packages/*' build",
+    "dev": "bun run --filter './apps/api' dev",
+    "test": "bun test packages/core packages/sdk",
+    "lint": "bun run --filter './apps/*' --filter './packages/*' lint"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.10",
+    "typescript": "^5.6.2"
+  },
+  "engines": {
+    "bun": ">=1.1.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/bun-eth.git"
+  },
+  "keywords": [
+    "ethereum",
+    "bun",
+    "elysia",
+    "hardhat",
+    "web3",
+    "scaffold"
+  ]
+}

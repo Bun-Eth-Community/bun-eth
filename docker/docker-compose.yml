@@ -1,0 +1,53 @@
+services:
+  # Hardhat local Ethereum node
+  hardhat:
+    image: ethereum/client-go:stable
+    container_name: bun-eth-hardhat
+    ports:
+      - "8545:8545"
+      - "8546:8546"
+    command: |
+      --dev
+      --http
+      --http.addr=0.0.0.0
+      --http.port=8545
+      --http.api=eth,net,web3,personal,debug
+      --http.corsdomain=*
+      --ws
+      --ws.addr=0.0.0.0
+      --ws.port=8546
+      --ws.api=eth,net,web3
+      --ws.origins=*
+      --allow-insecure-unlock
+      --dev.period=0
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "8545"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Bun-Eth API
+  api:
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
+    container_name: bun-eth-api
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      NODE_ENV: development
+      HARDHAT_NODE: http://hardhat:8545
+      PRIVATE_KEY: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+      CHAIN_ID: 31337
+    depends_on:
+      hardhat:
+        condition: service_healthy
+    volumes:
+      - ../apps/api:/app/apps/api
+      - ../packages/core:/app/packages/core
+    restart: unless-stopped
+
+networks:
+  default:
+    name: bun-eth-network
