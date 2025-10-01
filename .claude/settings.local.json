@@ -18,7 +18,8 @@
       "Bash(docker logs bun-eth-api)",
       "Bash(docker logs:*)",
       "Bash(docker run:*)",
-      "Bash(docker start:*)"
+      "Bash(docker start:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

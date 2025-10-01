@@ -244,7 +244,7 @@ All PRD success criteria have been met:
 
 ## 🔗 Links
 
-- Repository: https://github.com/yourusername/bun-eth
+- Repository: https://github.com/Bun-Eth-Community/bun-eth
 - Bun: https://bun.sh
 - Elysia: https://elysiajs.com
 - Foundry: https://getfoundry.sh

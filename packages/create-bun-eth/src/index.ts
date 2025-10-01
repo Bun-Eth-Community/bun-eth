@@ -4,7 +4,7 @@ import { $ } from "bun";
 import { existsSync } from "fs";
 import { join } from "path";
 
-const REPO_URL = "https://github.com/yourusername/bun-eth.git";
+const REPO_URL = "https://github.com/Bun-Eth-Community/bun-eth.git";
 
 interface CliArgs {
   projectName: string;

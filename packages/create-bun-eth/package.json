@@ -1,34 +1,49 @@
 {
   "name": "create-bun-eth",
   "version": "0.1.0",
-  "description": "Scaffold a new Bun-Eth project",
+  "description": "Scaffold a Bun-first Ethereum project with Foundry and Elysia",
   "bin": {
     "create-bun-eth": "./src/index.ts"
   },
   "type": "module",
   "scripts": {
     "build": "echo 'No build needed for Bun'",
-    "test": "bun test"
+    "test": "bun test",
+    "prepublishOnly": "echo 'Publishing create-bun-eth'"
   },
   "keywords": [
     "ethereum",
     "bun",
     "scaffold",
     "web3",
-    "cli"
+    "cli",
+    "foundry",
+    "forge",
+    "elysia",
+    "solidity",
+    "smart-contracts",
+    "dapp",
+    "create"
   ],
-  "author": "",
+  "author": "Bun-Eth Community",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/bun-eth.git",
+    "url": "https://github.com/Bun-Eth-Community/bun-eth.git",
     "directory": "packages/create-bun-eth"
+  },
+  "homepage": "https://github.com/Bun-Eth-Community/bun-eth#readme",
+  "bugs": {
+    "url": "https://github.com/Bun-Eth-Community/bun-eth/issues"
   },
   "files": [
     "src",
-    "template"
+    "README.md"
   ],
   "engines": {
     "bun": ">=1.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

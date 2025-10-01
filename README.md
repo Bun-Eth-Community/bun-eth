@@ -32,7 +32,7 @@ task setup
 ### Manual Clone
 
 ```bash
-git clone https://github.com/yourusername/bun-eth.git my-dapp
+git clone https://github.com/Bun-Eth-Community/bun-eth.git my-dapp
 cd my-dapp
 task setup
 ```
@@ -413,9 +413,9 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## 📞 Support
 
-- 📖 [Documentation](https://github.com/yourusername/bun-eth/wiki)
-- 🐛 [Issue Tracker](https://github.com/yourusername/bun-eth/issues)
-- 💬 [Discussions](https://github.com/yourusername/bun-eth/discussions)
+- 📖 [Documentation](https://github.com/Bun-Eth-Community/bun-eth/wiki)
+- 🐛 [Issue Tracker](https://github.com/Bun-Eth-Community/bun-eth/issues)
+- 💬 [Discussions](https://github.com/Bun-Eth-Community/bun-eth/discussions)
 
 ---
 

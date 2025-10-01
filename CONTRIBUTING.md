@@ -7,7 +7,7 @@ Thank you for your interest in contributing to Bun-Eth! This document provides g
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/yourusername/bun-eth.git
+   git clone https://github.com/Bun-Eth-Community/bun-eth.git
    cd bun-eth
    ```
 3. Install dependencies:

@@ -125,5 +125,5 @@ task install
 ## Support
 
 - 📖 [Documentation](README.md)
-- 🐛 [Report Issues](https://github.com/yourusername/bun-eth/issues)
-- 💬 [Discussions](https://github.com/yourusername/bun-eth/discussions)
+- 🐛 [Report Issues](https://github.com/Bun-Eth-Community/bun-eth/issues)
+- 💬 [Discussions](https://github.com/Bun-Eth-Community/bun-eth/discussions)
