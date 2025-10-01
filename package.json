@@ -29,7 +29,9 @@
     "ethereum",
     "bun",
     "elysia",
-    "hardhat",
+    "foundry",
+    "forge",
+    "anvil",
     "web3",
     "scaffold"
   ]

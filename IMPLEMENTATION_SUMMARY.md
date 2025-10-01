@@ -12,7 +12,7 @@ All requirements from the PRD have been successfully implemented!
 bun-eth/
 ├── apps/api/              # Elysia backend API
 ├── packages/
-│   ├── contracts/         # Hardhat smart contracts
+│   ├── contracts/         # Foundry smart contracts
 │   ├── core/             # Shared utilities & types
 │   ├── sdk/              # TypeScript SDK client
 │   └── create-bun-eth/   # Scaffolding CLI
@@ -39,15 +39,15 @@ bun-eth/
 - Structured logging
 - Environment-based configuration
 
-### 3. Smart Contracts (Hardhat) ✅
+### 3. Smart Contracts (Foundry) ✅
 
 **Location:** `packages/contracts/`
 
 **Includes:**
 - Sample `SimpleStorage.sol` contract
-- Deploy scripts
-- Hardhat tests (Chai/Mocha)
-- TypeChain type generation
+- Forge deploy scripts
+- Foundry tests (Solidity)
+- Fuzz testing
 - Network configurations (localhost, Sepolia)
 
 ### 4. Core Package ✅
@@ -81,7 +81,7 @@ const wallet = await client.getWallet("0x...");
 **Location:** `docker/`
 
 **Services:**
-- Hardhat Ethereum node (port 8545)
+- Anvil Ethereum node (port 8545)
 - Bun-Eth API (port 3001)
 - Health checks
 - Auto-restart policies
@@ -123,9 +123,9 @@ bunx create-bun-eth@latest my-dapp
 - SDK client: `packages/sdk/src/*.test.ts`
 - Run with: `bun test`
 
-**Hardhat contract tests:**
+**Foundry contract tests:**
 - Location: `packages/contracts/test/`
-- Run with: `task test:contracts`
+- Run with: `task test:contracts` or `forge test`
 
 **Status:** 8 tests pass ✅
 
@@ -144,7 +144,7 @@ bunx create-bun-eth@latest my-dapp
 |------------|--------|-------|
 | Bun-native monorepo | ✅ | 100% Bun, no Node tooling |
 | Elysia backend | ✅ | Full API with 6 endpoints |
-| Hardhat contracts | ✅ | Sample contract + tests |
+| Foundry contracts | ✅ | Sample contract + tests |
 | Bun tests | ✅ | Native `bun test` |
 | Docker Compose | ✅ | 2 services configured |
 | Taskfile | ✅ | 20+ tasks |
@@ -164,7 +164,7 @@ bun install
 bun test
 
 # Compile contracts
-cd packages/contracts && bun hardhat compile
+cd packages/contracts && forge build
 ```
 
 ### 2. Start Development
@@ -200,7 +200,7 @@ Copy `.env.example` to `.env` and configure:
 ```bash
 PORT=3001
 NODE_ENV=development
-HARDHAT_NODE=http://localhost:8545
+ANVIL_NODE=http://localhost:8545
 PRIVATE_KEY=0x...
 CHAIN_ID=31337
 ```
@@ -220,7 +220,7 @@ CHAIN_ID=31337
 1. **Pure Bun Stack** - No Node.js required
 2. **Type-Safe** - Full TypeScript coverage
 3. **Modern APIs** - Elysia framework
-4. **Battle-Tested Contracts** - Hardhat + OpenZeppelin
+4. **Battle-Tested Contracts** - Foundry + Solidity tests
 5. **Developer Experience** - Taskfile + hot reload
 6. **Production Ready** - Docker + env configs
 7. **Extensible** - Monorepo structure
@@ -237,7 +237,7 @@ All PRD success criteria have been met:
 
 ## 📝 Notes
 
-- Contract tests run separately via `task test:contracts` (Hardhat-specific)
+- Contract tests run via `task test:contracts` or `forge test` (Foundry)
 - Root-level `bun test` runs core + SDK tests only
 - API requires Ethereum node to be running
 - Default private key is for development only
@@ -247,9 +247,9 @@ All PRD success criteria have been met:
 - Repository: https://github.com/yourusername/bun-eth
 - Bun: https://bun.sh
 - Elysia: https://elysiajs.com
-- Hardhat: https://hardhat.org
+- Foundry: https://getfoundry.sh
 
 ---
 
-**Built with ⚡ by Claude Code**
+**Built with ⚡ by Claude Code under supervision of the Bun-Eth community**
 **Implementation Date:** 2025-09-30

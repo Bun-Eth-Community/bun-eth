@@ -80,7 +80,7 @@ bun-eth/
 │   │   ├── contracts/         # Solidity files
 │   │   ├── scripts/          # Deploy scripts
 │   │   ├── test/             # Contract tests
-│   │   └── hardhat.config.ts
+│   │   └── foundry.toml
 │   ├── core/                  # Shared utilities
 │   │   └── src/
 │   │       ├── types.ts      # Common types
@@ -316,7 +316,7 @@ PORT=3001
 NODE_ENV=development
 
 # Ethereum Node
-HARDHAT_NODE=http://localhost:8545
+ANVIL_NODE=http://localhost:8545
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 
 # Network Configuration

@@ -7,10 +7,18 @@
       "Bash(task:*)",
       "Bash(bunx:*)",
       "Bash(node:*)",
-      "Bash(npx hardhat:*)",
+      "Bash(cast:*)",
+      "Bash(anvil:*)",
       "WebSearch",
       "Bash(forge:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(curl -s http://localhost:8545 -X POST -H \"Content-Type: application/json\" --data '{\"\"\"\"jsonrpc\"\"\"\":\"\"\"\"2.0\"\"\"\",\"\"\"\"method\"\"\"\":\"\"\"\"eth_blockNumber\"\"\"\",\"\"\"\"params\"\"\"\":[],\"\"\"\"id\"\"\"\":1}')",
+      "Bash(docker exec:*)",
+      "Bash(curl:*)",
+      "Bash(docker logs bun-eth-api)",
+      "Bash(docker logs:*)",
+      "Bash(docker run:*)",
+      "Bash(docker start:*)"
     ],
     "deny": [],
     "ask": []

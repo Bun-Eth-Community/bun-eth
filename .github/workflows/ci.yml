@@ -18,6 +18,9 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
       - name: Install dependencies
         run: bun install
 
@@ -26,11 +29,11 @@ jobs:
 
       - name: Compile contracts
         working-directory: packages/contracts
-        run: bun hardhat compile
+        run: forge build
 
       - name: Run contract tests
         working-directory: packages/contracts
-        run: bun hardhat test
+        run: forge test -vv
 
   lint:
     runs-on: ubuntu-latest

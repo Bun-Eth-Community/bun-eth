@@ -47,7 +47,7 @@ Options:
 What you get:
   📦 Bun-native monorepo setup
   🚀 Elysia backend API
-  📜 Hardhat smart contracts
+  📜 Foundry smart contracts
   🐳 Docker Compose configuration
   ⚡ Taskfile for orchestration
   🧪 Bun-native testing
@@ -123,7 +123,7 @@ Next steps:
 
 🌐 Services will be available at:
    - API: http://localhost:3001
-   - Hardhat Node: http://localhost:8545
+   - Anvil Node: http://localhost:8545
 
 Happy building! 🎉
     `);

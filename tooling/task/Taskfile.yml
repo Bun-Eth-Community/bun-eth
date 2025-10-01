@@ -1,7 +1,5 @@
 version: '3'
 
-dotenv: ['.env']
-
 vars:
   DOCKER_COMPOSE_FILE: ./docker/docker-compose.yml
 
@@ -149,10 +147,10 @@ tasks:
       - echo "Cleaned all build artifacts"
 
   clean:cache:
-    desc: Clean Hardhat cache and artifacts
+    desc: Clean Foundry cache and artifacts
     dir: packages/contracts
     cmds:
-      - rm -rf artifacts cache typechain-types
+      - rm -rf out cache
       - echo "Cleaned contract artifacts"
 
   # Database/State management
@@ -171,7 +169,7 @@ tasks:
   check:health:
     desc: Check API health
     cmds:
-      - curl -s http://localhost:3001/health | bun run -e "console.log(JSON.stringify(JSON.parse(await Bun.stdin.text()), null, 2))"
+      - curl -s http://localhost:3001/health | jq .
 
   # Quick start
   start:

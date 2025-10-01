@@ -35,7 +35,7 @@ task start
 This will:
 - ✅ Install all dependencies
 - ✅ Compile smart contracts
-- ✅ Start Hardhat local node
+- ✅ Start Anvil local node
 - ✅ Start Bun-Eth API
 
 ## 4. Deploy Contracts

@@ -16,10 +16,20 @@ try {
   process.exit(1);
 }
 
-// Check provider connection
-const connected = await checkConnection();
+// Check provider connection with retries
+let connected = false;
+const maxRetries = 10;
+for (let i = 0; i < maxRetries; i++) {
+  connected = await checkConnection();
+  if (connected) {
+    break;
+  }
+  logger.warn(`Failed to connect to Ethereum node (attempt ${i + 1}/${maxRetries}), retrying in 2s...`);
+  await new Promise(resolve => setTimeout(resolve, 2000));
+}
+
 if (!connected) {
-  logger.error("Failed to connect to Ethereum node");
+  logger.error("Failed to connect to Ethereum node after all retries");
   process.exit(1);
 }
 

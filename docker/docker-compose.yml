@@ -5,9 +5,11 @@ services:
     container_name: bun-eth-anvil
     ports:
       - "8545:8545"
-    command: anvil --host 0.0.0.0 --block-time 1
+    environment:
+      - ANVIL_IP_ADDR=0.0.0.0
+    command: ["anvil", "--host", "0.0.0.0", "--port", "8545", "--block-time", "1"]
     healthcheck:
-      test: ["CMD", "cast", "block-number", "--rpc-url", "http://localhost:8545"]
+      test: ["CMD", "cast", "block-number", "--rpc-url", "http://127.0.0.1:8545"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -23,7 +25,7 @@ services:
     environment:
       PORT: 3001
       NODE_ENV: development
-      HARDHAT_NODE: http://anvil:8545
+      ANVIL_NODE: http://anvil:8545
       PRIVATE_KEY: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
       CHAIN_ID: 31337
     depends_on:
