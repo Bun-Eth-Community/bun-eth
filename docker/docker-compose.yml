@@ -4,7 +4,7 @@ services:
     image: ghcr.io/foundry-rs/foundry:latest
     container_name: bun-eth-anvil
     ports:
-      - "8545:8545"
+      - "${ANVIL_PORT:-8545}:8545"
     environment:
       - ANVIL_IP_ADDR=0.0.0.0
     command: ["anvil", "--host", "0.0.0.0", "--port", "8545", "--block-time", "1"]
@@ -21,7 +21,7 @@ services:
       dockerfile: apps/api/Dockerfile
     container_name: bun-eth-api
     ports:
-      - "3001:3001"
+      - "${API_PORT:-3001}:3001"
     environment:
       PORT: 3001
       NODE_ENV: development
@@ -34,6 +34,25 @@ services:
     volumes:
       - ../apps/api:/app/apps/api
       - ../packages/core:/app/packages/core
+    restart: unless-stopped
+
+  # Next.js Web UI
+  web:
+    image: oven/bun:1
+    container_name: bun-eth-web
+    working_dir: /app/apps/web
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    environment:
+      PORT: 3000
+      HOSTNAME: "0.0.0.0"
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: http://localhost:${API_PORT:-3001}
+    depends_on:
+      - api
+    command: sh -c "cd /app && bun install && cd apps/web && bun run dev"
+    volumes:
+      - ../:/app
     restart: unless-stopped
 
 networks:

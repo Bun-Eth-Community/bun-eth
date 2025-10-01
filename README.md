@@ -10,14 +10,21 @@ A **pure Bun-native monorepo template** for building Ethereum-based applications
 
 ## ✨ Features
 
-- 🚀 **Bun-Native** - 100% Bun, no Node.js required
-- ⚡ **Elysia Backend** - Fast, TypeScript-first web framework
-- 📜 **Foundry Contracts** - Blazing fast Rust-based smart contract framework
-- 🐳 **Docker Compose** - Complete local development environment with Anvil
-- 📦 **Monorepo** - Clean separation of concerns with workspaces
-- 🧪 **Native Tests** - Bun tests for SDK/API, Solidity tests for contracts
+- 🔥 **Contract Hot Reload** - Your frontend auto-adapts to your smart contracts as you deploy them
+- 🎣 **Custom Hooks** - Type-safe React hooks for reading, writing, and watching contracts (`@bun-eth/hooks`)
+- 🧱 **Web3 Components** - Pre-built UI components for addresses, balances, inputs, and more (`@bun-eth/components`)
+- 💰 **Burner Wallet** - Ephemeral wallets for instant testing without MetaMask
+- 🚰 **Local Faucet** - Built-in faucet for quick testing on Anvil
+- 🌈 **RainbowKit** - Beautiful wallet connection UI with multi-wallet support
+- 🚀 **Bun-Native** - 100% Bun, no Node.js required - lightning fast builds
+- ⚡ **Elysia Backend** - Fast, TypeScript-first web framework for REST API
+- 🎨 **Next.js Frontend** - Modern React framework with shadcn/ui components
+- 🔨 **Foundry Contracts** - Blazing fast Rust-based smart contract framework (Forge + Anvil)
+- 🐳 **Docker Compose** - Complete local development environment
+- 📦 **Clean Monorepo** - Well-architected packages with clear separation of concerns
+- 🧪 **Comprehensive Testing** - Bun tests for TypeScript, Foundry tests for Solidity
 - 🔧 **Taskfile** - Powerful command orchestration
-- 🎨 **TypeScript** - Full type safety across the stack
+- 💎 **Full TypeScript** - Type safety from contracts to UI
 
 ## 🚀 Quick Start
 
@@ -68,33 +75,50 @@ bunx @go-task/cli
 ```
 bun-eth/
 ├── apps/
-│   └── api/                    # Elysia backend API
+│   ├── api/                         # Elysia backend API
+│   │   ├── src/
+│   │   │   ├── index.ts            # API entry point
+│   │   │   ├── config.ts           # Configuration
+│   │   │   ├── provider.ts         # Ethereum provider setup
+│   │   │   └── routes/             # API routes
+│   │   └── Dockerfile
+│   └── web/                         # Next.js frontend
 │       ├── src/
-│       │   ├── index.ts       # API entry point
-│       │   ├── config.ts      # Configuration
-│       │   ├── provider.ts    # Ethereum provider setup
-│       │   └── routes/        # API routes
-│       └── Dockerfile
+│       │   ├── app/                # App router pages
+│       │   ├── components/         # Local components
+│       │   └── lib/                # Utilities & wagmi config
+│       └── package.json
 ├── packages/
-│   ├── contracts/             # Smart contracts
-│   │   ├── contracts/         # Solidity files
-│   │   ├── scripts/          # Deploy scripts
-│   │   ├── test/             # Contract tests
+│   ├── contracts/                   # Smart contracts (Foundry)
+│   │   ├── contracts/              # Solidity files
+│   │   ├── script/                 # Deploy scripts
+│   │   ├── test/                   # Foundry tests
+│   │   ├── deployedContracts.ts    # 🔥 Auto-generated (hot reload!)
 │   │   └── foundry.toml
-│   ├── core/                  # Shared utilities
+│   ├── hooks/                       # 🎣 React hooks for Web3
 │   │   └── src/
-│   │       ├── types.ts      # Common types
-│   │       ├── utils.ts      # Utility functions
-│   │       └── logger.ts     # Logging
-│   ├── sdk/                   # TypeScript SDK
+│   │       ├── useScaffoldContract.ts
+│   │       ├── useScaffoldReadContract.ts
+│   │       ├── useScaffoldWriteContract.ts
+│   │       └── ...                 # 10+ hooks
+│   ├── components/                  # 🧱 Web3 UI components
 │   │   └── src/
-│   │       └── client.ts     # API client
-│   └── create-bun-eth/        # Scaffolding CLI
+│   │       ├── Address.tsx
+│   │       ├── Balance.tsx
+│   │       ├── Faucet.tsx
+│   │       └── ...                 # 10+ components
+│   ├── foundry-deployer/            # 🔥 Hot reload system
+│   │   └── src/
+│   │       ├── generator.ts        # Generates deployedContracts.ts
+│   │       └── cli.ts              # CLI tool
+│   ├── core/                        # Shared utilities
+│   ├── sdk/                         # TypeScript SDK for API
+│   └── create-bun-eth/              # Scaffolding CLI
 ├── tooling/
 │   └── task/
-│       └── Taskfile.yml      # Task definitions
+│       └── Taskfile.yml            # Task definitions
 └── docker/
-    └── docker-compose.yml    # Local stack
+    └── docker-compose.yml          # Anvil + API + Web
 ```
 
 ## 🛠️ Development
@@ -108,6 +132,14 @@ task dev:up
 This starts:
 - Anvil local Ethereum node on `http://localhost:8545`
 - Bun-Eth API on `http://localhost:3001`
+
+### Start Web UI
+
+```bash
+task web:dev
+```
+
+This starts the Next.js frontend on `http://localhost:3000`
 
 ### Stop Development Stack
 
@@ -230,6 +262,35 @@ Content-Type: application/json
 }
 ```
 
+## 🌐 Frontend Development
+
+The Next.js frontend includes:
+- **shadcn/ui** - Beautiful, accessible components built on Radix UI
+- **wagmi** - React Hooks for Ethereum
+- **viem** - TypeScript Ethereum library
+- **Tailwind CSS** - Utility-first CSS framework
+
+### Web Tasks
+
+```bash
+# Start development server
+task web:dev
+
+# Build for production
+task web:build
+
+# Start production server
+task web:start
+```
+
+### Wallet Integration
+
+The frontend supports:
+- MetaMask and other injected wallets
+- WalletConnect for mobile wallets
+- Automatic network switching
+- Real-time blockchain data updates
+
 ## 🧪 Testing
 
 ### Run All Tests
@@ -321,6 +382,9 @@ PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 
 # Network Configuration
 CHAIN_ID=31337
+
+# Frontend (Optional)
+NEXT_PUBLIC_WC_PROJECT_ID=  # WalletConnect Project ID
 ```
 
 ### Foundry Networks
@@ -333,7 +397,58 @@ localhost = "http://127.0.0.1:8545"
 sepolia = "${SEPOLIA_RPC_URL}"
 ```
 
-## 📚 Available Tasks
+## 🚀 Quick Start Example
+
+After running `task dev:up` and `task contracts:deploy`, use the new packages:
+
+```typescript
+// In your component
+import { useScaffoldReadContract, useScaffoldWriteContract } from "@bun-eth/hooks";
+import { Address, Balance, FaucetButton, BurnerWalletInfo } from "@bun-eth/components";
+import { useAccount } from "wagmi";
+
+function MyDApp() {
+  const { address } = useAccount();
+
+  // Read contract state - auto-refreshes on new blocks
+  const { data: value } = useScaffoldReadContract({
+    contractName: "SimpleStorage",
+    functionName: "retrieve",
+    watch: true,
+  });
+
+  // Write to contract - includes notifications
+  const { writeContractAsync, isMining } = useScaffoldWriteContract("SimpleStorage");
+
+  const handleStore = async () => {
+    await writeContractAsync("store", [42]);
+  };
+
+  return (
+    <div>
+      {/* Show burner wallet info if using burner */}
+      <BurnerWalletInfo />
+
+      {/* Display address with ENS */}
+      <Address address={address} format="short" />
+
+      {/* Balance with USD toggle */}
+      <Balance address={address} usdMode />
+
+      {/* Faucet for test ETH */}
+      <FaucetButton />
+
+      {/* Contract interaction */}
+      <p>Stored Value: {value?.toString()}</p>
+      <button onClick={handleStore} disabled={isMining}>
+        {isMining ? "Mining..." : "Store 42"}
+      </button>
+    </div>
+  );
+}
+```
+
+## 📚 Available Commands
 
 Run `task --list` to see all available commands.
 
@@ -347,13 +462,19 @@ task setup
 task start
 
 # Development
-task dev:up              # Start local development stack
+task dev:up              # Start local development stack (Anvil + API + Web)
 task dev:down            # Stop local development stack
 task dev:logs            # View logs from all services
 
+# Frontend
+task web:dev             # Start Next.js dev server
+task web:build           # Build Next.js for production
+task web:start           # Start Next.js production server
+
 # Contracts
 task contracts:compile   # Compile smart contracts
-task contracts:deploy    # Deploy to local network
+task contracts:deploy    # Deploy to local network + generate types (🔥 hot reload)
+task contracts:generate  # Generate TypeScript from deployed contracts
 task contracts:test      # Run contract tests
 
 # Testing
@@ -400,6 +521,23 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch: `git push origin feature/my-feature`
 5. Open a Pull Request
 
+## 📚 Documentation
+
+- **[FEATURES.md](./FEATURES.md)** - Complete feature list and comparisons
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - System design and architecture
+- **[packages/hooks/README.md](./packages/hooks/README.md)** - Custom hooks documentation
+- **[packages/components/README.md](./packages/components/README.md)** - UI components guide
+- **[packages/foundry-deployer/README.md](./packages/foundry-deployer/README.md)** - Hot reload system
+- **[packages/burner-connector/README.md](./packages/burner-connector/README.md)** - Burner wallet connector
+
+## 🎓 Learn More
+
+- [Foundry Book](https://book.getfoundry.sh/) - Learn Foundry
+- [Viem Docs](https://viem.sh/) - TypeScript Ethereum library
+- [Wagmi Docs](https://wagmi.sh/) - React Hooks for Ethereum
+- [RainbowKit Docs](https://www.rainbowkit.com/) - Wallet connection UI
+- [Scaffold-ETH 2](https://scaffoldeth.io/) - Original inspiration
+
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file for details
@@ -409,11 +547,13 @@ MIT License - see [LICENSE](LICENSE) file for details
 - [Bun](https://bun.sh) - The blazingly fast JavaScript runtime
 - [Elysia](https://elysiajs.com) - Fast and ergonomic TypeScript web framework
 - [Foundry](https://getfoundry.sh) - Blazing fast Ethereum development toolkit
-- [scaffold-eth-2](https://github.com/scaffold-eth/scaffold-eth-2) - Inspiration
+- [scaffold-eth-2](https://github.com/scaffold-eth/scaffold-eth-2) - Inspiration for features
+- [wagmi](https://wagmi.sh/) + [viem](https://viem.sh/) - Modern Ethereum libraries
+- [RainbowKit](https://www.rainbowkit.com/) - Beautiful wallet UX
 
 ## 📞 Support
 
-- 📖 [Documentation](https://github.com/Bun-Eth-Community/bun-eth/wiki)
+- 📖 [Documentation](https://github.com/Bun-Eth-Community/bun-eth)
 - 🐛 [Issue Tracker](https://github.com/Bun-Eth-Community/bun-eth/issues)
 - 💬 [Discussions](https://github.com/Bun-Eth-Community/bun-eth/discussions)
 

@@ -19,7 +19,22 @@
       "Bash(docker logs:*)",
       "Bash(docker run:*)",
       "Bash(docker start:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(docker compose:*)",
+      "Bash(if [ -d \"node_modules\" ])",
+      "Bash(then echo \"Root node_modules exists\")",
+      "Bash(else echo \"Root node_modules NOT found\")",
+      "Bash(fi)",
+      "Bash(timeout 30 docker compose -f docker/docker-compose.yml logs -f web)",
+      "Bash(docker port:*)",
+      "Bash(docker:*)",
+      "Bash(/dev/null)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:docs.scaffoldeth.io)",
+      "Bash(lsof:*)",
+      "Bash(kill:*)",
+      "Bash(chmod:*)",
+      "Bash(bash:*)"
     ],
     "deny": [],
     "ask": []

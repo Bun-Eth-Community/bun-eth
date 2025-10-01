@@ -12,13 +12,29 @@ tasks:
 
   # Development
   dev:up:
-    desc: Start local development stack (API + Anvil node)
+    desc: Start local development stack (Web UI + API + Anvil node)
     cmds:
+      - task: dev:clean-ports
       - docker compose -f {{.DOCKER_COMPOSE_FILE}} up --build -d
       - echo "Development stack started"
-      - echo "Anvil node at http://localhost:8545"
+      - echo ""
+      - echo "Services:"
+      - echo "Web UI at http://localhost:3000"
       - echo "API at http://localhost:3001"
+      - echo "Anvil at http://localhost:8545"
+      - echo ""
       - echo "Health check at http://localhost:3001/health"
+
+  dev:clean-ports:
+    desc: Kill processes on development ports
+    cmds:
+      - bash scripts/kill-ports.sh
+    silent: true
+
+  dev:auto-ports:
+    desc: Automatically find and configure free ports
+    cmds:
+      - bash scripts/auto-port-setup.sh
 
   dev:down:
     desc: Stop local development stack
@@ -59,6 +75,7 @@ tasks:
     dir: packages/contracts
     cmds:
       - forge script script/Deploy.s.sol:DeployScript --rpc-url http://localhost:8545 --broadcast --legacy
+      - task: contracts:generate
 
   contracts:deploy:sepolia:
     desc: Deploy contracts to Sepolia testnet
@@ -71,6 +88,12 @@ tasks:
     dir: packages/contracts
     cmds:
       - forge test -vv
+
+  contracts:generate:
+    desc: Generate TypeScript from deployed contracts (enables hot reload)
+    cmds:
+      - bun run packages/foundry-deployer/src/cli.ts
+      - echo "✨ Contract types generated! Frontend will hot reload."
 
   contracts:node:
     desc: Run standalone Anvil node
@@ -88,6 +111,31 @@ tasks:
     desc: Build API (no-op for Bun)
     cmds:
       - echo "No build needed for Bun - TypeScript runs directly"
+
+  build:web:
+    desc: Build Next.js web app
+    dir: apps/web
+    cmds:
+      - bun run build
+
+  # Web Development
+  web:dev:
+    desc: Start Next.js development server
+    dir: apps/web
+    cmds:
+      - bun run dev
+
+  web:build:
+    desc: Build Next.js for production
+    dir: apps/web
+    cmds:
+      - bun run build
+
+  web:start:
+    desc: Start Next.js production server
+    dir: apps/web
+    cmds:
+      - bun run start
 
   # Testing
   test:
@@ -179,9 +227,9 @@ tasks:
       - task: contracts:compile
       - task: dev:up
       - echo ""
-      - echo "Bun-Eth is ready!"
-      - echo "API running at http://localhost:3001"
-      - echo "Anvil node at http://localhost:8545"
+      - echo "🚀 Bun-Eth is ready!"
+      - echo ""
+      - echo "Open http://localhost:3000 in your browser"
       - echo ""
       - echo "Next steps:"
       - echo "  - Deploy contracts with 'task contracts:deploy'"
