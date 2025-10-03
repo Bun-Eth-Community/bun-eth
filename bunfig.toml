@@ -1,0 +1,9 @@
+[test]
+# Exclude Playwright e2e tests from Bun's test runner
+exclude = [
+  "**/node_modules/**",
+  "**/dist/**",
+  "**/.next/**",
+  "**/tests/e2e/**",
+  "**/*.spec.ts"
+]

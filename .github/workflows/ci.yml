@@ -35,6 +35,25 @@ jobs:
         working-directory: packages/contracts
         run: forge test -vv
 
+      - name: Build workspace packages
+        run: bun run --filter '@bun-eth/components' --filter '@bun-eth/hooks' --filter '@bun-eth/burner-connector' build
+
+      - name: Install Playwright browsers
+        working-directory: apps/web
+        run: bunx playwright install chromium --with-deps
+
+      - name: Run e2e tests
+        working-directory: apps/web
+        run: bun run test:e2e
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report/
+          retention-days: 30
+
   lint:
     runs-on: ubuntu-latest
 

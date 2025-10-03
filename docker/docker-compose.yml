@@ -50,7 +50,7 @@ services:
       NEXT_PUBLIC_API_URL: http://localhost:${API_PORT:-3001}
     depends_on:
       - api
-    command: sh -c "cd /app && bun install && cd apps/web && bun run dev"
+    command: sh -c "cd /app && bun install && cd packages/burner-connector && bunx tsup src/index.ts --format cjs,esm --external wagmi --external viem --no-dts && cd ../hooks && bunx tsup src/index.ts --format cjs,esm --no-dts && cd ../components && bunx tsup src/index.ts --format cjs,esm --external react --no-dts && cd ../../apps/web && bun run dev"
     volumes:
       - ../:/app
     restart: unless-stopped

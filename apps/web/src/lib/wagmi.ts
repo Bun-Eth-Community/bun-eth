@@ -7,12 +7,17 @@ import { burnerWalletConnector } from "@bun-eth/burner-connector";
 export const chains = [mainnet, sepolia, localhost] as const;
 
 // Connectors for wallet connection
-const connectors = [
-  injected(),
-  walletConnect({
-    projectId: process.env.NEXT_PUBLIC_WC_PROJECT_ID || "",
-  }),
-];
+const connectors = [injected()];
+
+// Add WalletConnect only if project ID is configured
+const wcProjectId = process.env.NEXT_PUBLIC_WC_PROJECT_ID;
+if (wcProjectId && wcProjectId.trim()) {
+  connectors.push(
+    walletConnect({
+      projectId: wcProjectId,
+    })
+  );
+}
 
 // Add burner wallet only in development
 if (process.env.NODE_ENV === "development") {

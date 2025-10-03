@@ -14,8 +14,8 @@
     "./styles.css": "./dist/styles.css"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --external react",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --external react",
+    "build": "tsup src/index.ts --format cjs,esm --external react",
+    "dev": "tsup src/index.ts --format cjs,esm --watch --external react",
     "test": "bun test"
   },
   "dependencies": {

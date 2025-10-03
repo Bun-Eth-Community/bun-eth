@@ -13,8 +13,8 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --external wagmi --external viem",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --external wagmi --external viem"
+    "build": "tsup src/index.ts --format cjs,esm --external wagmi --external viem",
+    "dev": "tsup src/index.ts --format cjs,esm --watch --external wagmi --external viem"
   },
   "dependencies": {
     "wagmi": "^2.16.4",
