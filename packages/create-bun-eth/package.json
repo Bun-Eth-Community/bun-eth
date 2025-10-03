@@ -1,7 +1,7 @@
 {
   "name": "create-bun-eth",
-  "version": "0.1.0",
-  "description": "Scaffold a Bun-first Ethereum project with Foundry and Elysia",
+  "version": "0.2.0",
+  "description": "Scaffold a Bun-first Ethereum project - Full-Stack dApp or Backend-Only API",
   "bin": {
     "create-bun-eth": "./src/index.ts"
   },
@@ -23,7 +23,14 @@
     "solidity",
     "smart-contracts",
     "dapp",
-    "create"
+    "create",
+    "nextjs",
+    "rainbowkit",
+    "wagmi",
+    "viem",
+    "burner-wallet",
+    "full-stack",
+    "backend-only"
   ],
   "author": "Bun-Eth Community",
   "license": "MIT",

@@ -3,12 +3,15 @@
 import { $ } from "bun";
 import { existsSync } from "fs";
 import { join } from "path";
+import * as readline from "readline";
 
 const REPO_URL = "https://github.com/Bun-Eth-Community/bun-eth.git";
 
+type ProjectType = "full-stack" | "backend-only";
+
 interface CliArgs {
   projectName: string;
-  template?: string;
+  type?: ProjectType;
 }
 
 function parseArgs(): CliArgs {
@@ -19,10 +22,51 @@ function parseArgs(): CliArgs {
     process.exit(0);
   }
 
+  // Check for --backend-only or --full-stack flags
+  let type: ProjectType | undefined;
+  if (args.includes("--backend-only")) {
+    type = "backend-only";
+  } else if (args.includes("--full-stack")) {
+    type = "full-stack";
+  }
+
   return {
     projectName: args[0],
-    template: args[1],
+    type,
   };
+}
+
+async function promptProjectType(): Promise<ProjectType> {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise((resolve) => {
+    console.log("\n📦 What type of project would you like to create?\n");
+    console.log("  1️⃣  Full-Stack dApp");
+    console.log("     → Next.js frontend + Elysia backend + Foundry contracts");
+    console.log("     → RainbowKit + wagmi + Custom hooks & components");
+    console.log("     → Burner wallet + Local faucet");
+    console.log("     → Contract hot reload\n");
+    console.log("  2️⃣  Backend-Only");
+    console.log("     → Elysia API + Foundry contracts only");
+    console.log("     → Perfect for APIs, bots, or custom frontends\n");
+
+    rl.question("Select (1 or 2): ", (answer) => {
+      rl.close();
+      const choice = answer.trim();
+
+      if (choice === "1") {
+        resolve("full-stack");
+      } else if (choice === "2") {
+        resolve("backend-only");
+      } else {
+        console.log("\n⚠️  Invalid choice, defaulting to Full-Stack");
+        resolve("full-stack");
+      }
+    });
+  });
 }
 
 function printHelp() {
@@ -33,28 +77,87 @@ function printHelp() {
 ╚═══════════════════════════════════════════════════════════════╝
 
 Usage:
-  bunx create-bun-eth@latest <project-name>
+  bunx create-bun-eth@latest <project-name> [options]
 
-Example:
+Examples:
+  # Interactive (choose project type)
   bunx create-bun-eth@latest my-dapp
-  cd my-dapp
-  task install
-  task dev:up
+
+  # Full-stack dApp
+  bunx create-bun-eth@latest my-dapp --full-stack
+
+  # Backend-only API
+  bunx create-bun-eth@latest my-api --backend-only
 
 Options:
-  -h, --help    Show this help message
+  --full-stack      Create full-stack dApp with Next.js frontend
+  --backend-only    Create backend-only with API and contracts
+  -h, --help        Show this help message
 
-What you get:
-  📦 Bun-native monorepo setup
+Full-Stack includes:
+  🔥 Contract hot reload
+  🎣 Custom React hooks (@bun-eth/hooks)
+  🧱 Web3 UI components (@bun-eth/components)
+  💰 Burner wallet + Local faucet
+  🌈 RainbowKit wallet connection
+  🎨 Next.js + shadcn/ui
   🚀 Elysia backend API
   📜 Foundry smart contracts
-  🐳 Docker Compose configuration
-  ⚡ Taskfile for orchestration
+  🐳 Docker Compose (Anvil + API + Web)
+
+Backend-Only includes:
+  🚀 Elysia backend API
+  📜 Foundry smart contracts
+  🐳 Docker Compose (Anvil + API)
+  📦 TypeScript SDK
+  ⚡ Taskfile orchestration
   🧪 Bun-native testing
   `);
 }
 
-async function scaffoldProject(projectName: string) {
+async function removeBackendOnlyFiles(targetDir: string) {
+  console.log("🗑️  Removing frontend packages...");
+
+  // Remove frontend-related directories
+  await $`rm -rf ${join(targetDir, "apps/web")}`;
+  await $`rm -rf ${join(targetDir, "packages/hooks")}`;
+  await $`rm -rf ${join(targetDir, "packages/components")}`;
+  await $`rm -rf ${join(targetDir, "packages/burner-connector")}`;
+
+  // Update root package.json to remove web workspace
+  const packageJsonPath = join(targetDir, "package.json");
+  const packageJson = await Bun.file(packageJsonPath).json();
+  packageJson.workspaces = packageJson.workspaces.filter((ws: string) => ws !== "apps/web");
+  await Bun.write(packageJsonPath, JSON.stringify(packageJson, null, 2));
+
+  // Update docker-compose.yml to remove web service
+  const dockerComposePath = join(targetDir, "docker/docker-compose.yml");
+  let dockerCompose = await Bun.file(dockerComposePath).text();
+
+  // Remove web service section
+  const lines = dockerCompose.split('\n');
+  const filteredLines: string[] = [];
+  let skipLines = false;
+
+  for (const line of lines) {
+    if (line.includes('# Next.js Web UI')) {
+      skipLines = true;
+      continue;
+    }
+    if (skipLines && line.startsWith('networks:')) {
+      skipLines = false;
+    }
+    if (!skipLines) {
+      filteredLines.push(line);
+    }
+  }
+
+  await Bun.write(dockerComposePath, filteredLines.join('\n'));
+
+  console.log("✅ Backend-only setup complete");
+}
+
+async function scaffoldProject(projectName: string, projectType: ProjectType) {
   const targetDir = join(process.cwd(), projectName);
 
   // Check if directory already exists
@@ -63,7 +166,10 @@ async function scaffoldProject(projectName: string) {
     process.exit(1);
   }
 
-  console.log(`\n🚀 Creating Bun-Eth project: ${projectName}\n`);
+  const isFullStack = projectType === "full-stack";
+  const typeLabel = isFullStack ? "Full-Stack dApp" : "Backend-Only API";
+
+  console.log(`\n🚀 Creating ${typeLabel}: ${projectName}\n`);
 
   try {
     // Clone the template repository
@@ -73,6 +179,11 @@ async function scaffoldProject(projectName: string) {
     // Remove .git directory to start fresh
     console.log("🧹 Cleaning up...");
     await $`rm -rf ${join(targetDir, ".git")}`;
+
+    // Remove frontend files if backend-only
+    if (!isFullStack) {
+      await removeBackendOnlyFiles(targetDir);
+    }
 
     // Update package.json with project name
     console.log("📝 Updating project configuration...");
@@ -88,13 +199,17 @@ async function scaffoldProject(projectName: string) {
     await $`cd ${targetDir} && git commit -m "feat: initialize bun-eth project"`;
 
     // Success message
+    const webUrl = isFullStack ? "\n   - Web UI: http://localhost:3000" : "";
+    const webStep = isFullStack ? "\n\n  5️⃣  Open your browser:\n      http://localhost:3000" : "";
+
     console.log(`
 ╔═══════════════════════════════════════════════════════════════╗
 ║                  ✅ Project Created!                          ║
 ╚═══════════════════════════════════════════════════════════════╝
 
 📁 Project: ${projectName}
-📍 Location: ${targetDir}
+📍 Type: ${typeLabel}
+📂 Location: ${targetDir}
 
 Next steps:
 
@@ -107,23 +222,22 @@ Next steps:
   3️⃣  Start development stack:
       task dev:up
 
-  4️⃣  Compile & deploy contracts:
-      task contracts:compile
-      task contracts:deploy
-
-  5️⃣  Check API health:
-      task check:health
-
-  6️⃣  Run tests:
-      task test
+  4️⃣  Deploy contracts:
+      task contracts:deploy${webStep}
 
 📚 Documentation:
    - README.md for full documentation
+   - FEATURES.md for feature list
+   - ARCHITECTURE.md for system design
    - task --list for all available commands
 
-🌐 Services will be available at:
+🌐 Services will be available at:${webUrl}
    - API: http://localhost:3001
    - Anvil Node: http://localhost:8545
+
+${isFullStack ? "🎨 Frontend stack: Next.js + RainbowKit + wagmi + shadcn/ui" : ""}
+${isFullStack ? "🔥 Contract hot reload enabled!" : ""}
+${isFullStack ? "💰 Burner wallet + Local faucet included!" : ""}
 
 Happy building! 🎉
     `);
@@ -145,7 +259,11 @@ async function main() {
   `);
 
   const args = parseArgs();
-  await scaffoldProject(args.projectName);
+
+  // Prompt for project type if not provided
+  const projectType = args.type || await promptProjectType();
+
+  await scaffoldProject(args.projectName, projectType);
 }
 
 main().catch(console.error);
