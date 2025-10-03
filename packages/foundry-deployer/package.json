@@ -1,6 +1,6 @@
 {
   "name": "@bun-eth/foundry-deployer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Foundry deployment utilities with contract hot reload support",
   "bin": {
     "foundry-deployer": "./dist/cli.js"
@@ -30,6 +30,11 @@
     "tsup": "^8.0.1",
     "typescript": "^5.6.2"
   },
-  "keywords": ["foundry", "ethereum", "deployment", "hot-reload"],
+  "keywords": [
+    "foundry",
+    "ethereum",
+    "deployment",
+    "hot-reload"
+  ],
   "license": "MIT"
 }

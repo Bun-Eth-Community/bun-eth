@@ -1,11 +1,24 @@
 {
   "name": "@bun-eth/core",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.2.0",
+  "description": "Core utilities and types for Bun-Eth",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
   "scripts": {
     "test": "bun test",
     "lint": "echo 'No linting configured'"
-  }
+  },
+  "keywords": [
+    "ethereum",
+    "bun",
+    "core",
+    "utilities"
+  ],
+  "license": "MIT"
 }
