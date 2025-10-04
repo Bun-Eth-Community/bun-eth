@@ -13,6 +13,7 @@ const connectors = [injected()];
 const wcProjectId = process.env.NEXT_PUBLIC_WC_PROJECT_ID;
 if (wcProjectId && wcProjectId.trim()) {
   connectors.push(
+    // @ts-expect-error - wagmi connector type incompatibility with React 19
     walletConnect({
       projectId: wcProjectId,
     })
@@ -22,6 +23,7 @@ if (wcProjectId && wcProjectId.trim()) {
 // Add burner wallet only in development
 if (process.env.NODE_ENV === "development") {
   connectors.push(
+    // @ts-expect-error - wagmi connector type incompatibility with React 19
     burnerWalletConnector({
       storageKey: "bun-eth-burner-wallet",
       allowedChainIds: [31337], // Only localhost

@@ -14,8 +14,8 @@
     "./styles.css": "./dist/styles.css"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --external react",
-    "dev": "tsup src/index.ts --format cjs,esm --watch --external react",
+    "build": "tsup src/index.ts --format cjs,esm --dts --external react",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --external react",
     "test": "bun test"
   },
   "dependencies": {
@@ -32,8 +32,6 @@
     "react-dom": "^18.2.0 || ^19.0.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.48",
-    "@types/react-dom": "^18.2.18",
     "tsup": "^8.0.1",
     "typescript": "^5.6.2"
   },

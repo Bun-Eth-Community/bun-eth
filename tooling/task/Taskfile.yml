@@ -97,6 +97,8 @@ tasks:
   # Building
   build:
     desc: Build all packages
+    env:
+      NODE_ENV: production
     cmds:
       - bun run build
 
@@ -108,6 +110,8 @@ tasks:
   build:web:
     desc: Build Next.js web app
     dir: apps/web
+    env:
+      NODE_ENV: production
     cmds:
       - bun run build
 
