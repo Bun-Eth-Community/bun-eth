@@ -38,9 +38,11 @@ services:
 
   # Next.js Web UI
   web:
-    image: oven/bun:1
+    build:
+      context: ..
+      dockerfile: apps/web/Dockerfile
+      target: dev
     container_name: bun-eth-web
-    working_dir: /app/apps/web
     ports:
       - "${WEB_PORT:-3000}:3000"
     environment:
@@ -50,9 +52,11 @@ services:
       NEXT_PUBLIC_API_URL: http://localhost:${API_PORT:-3001}
     depends_on:
       - api
-    command: sh -c "cd /app && bun install && cd packages/burner-connector && bunx tsup src/index.ts --format cjs,esm --external wagmi --external viem --no-dts && cd ../hooks && bunx tsup src/index.ts --format cjs,esm --no-dts && cd ../components && bunx tsup src/index.ts --format cjs,esm --external react --no-dts && cd ../../apps/web && bun run dev"
     volumes:
-      - ../:/app
+      - ../apps/web:/app/apps/web
+      - ../packages:/app/packages
+      - /app/apps/web/.next
+      - /app/node_modules
     restart: unless-stopped
 
 networks:

@@ -37,9 +37,11 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.55.1",
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@types/node": "^20.11.5",
     "autoprefixer": "^10.4.17",
     "node-fetch": "^2.7.0",
+    "pino-pretty": "^13.1.1",
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.6.2"

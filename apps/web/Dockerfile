@@ -7,22 +7,23 @@ COPY package.json bun.lockb* ./
 COPY apps/web/package.json ./apps/web/
 COPY packages/sdk/package.json ./packages/sdk/
 COPY packages/core/package.json ./packages/core/
-RUN bun install
+COPY packages/burner-connector/package.json ./packages/burner-connector/
+COPY packages/hooks/package.json ./packages/hooks/
+COPY packages/components/package.json ./packages/components/
+RUN bun install || bun install --frozen-lockfile --ignore-scripts || true
 
 # Development
 FROM base AS dev
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/web/node_modules ./apps/web/node_modules
 COPY . .
 WORKDIR /app/apps/web
 EXPOSE 3000
 ENV PORT=3000
-CMD ["bun", "run", "dev"]
+CMD ["bunx", "next", "dev"]
 
 # Build
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/web/node_modules ./apps/web/node_modules
 COPY . .
 WORKDIR /app/apps/web
 ENV NEXT_TELEMETRY_DISABLED=1
