@@ -227,13 +227,13 @@ Next steps:
 
 📚 Documentation:
    - README.md for full documentation
-   - FEATURES.md for feature list
-   - ARCHITECTURE.md for system design
+   - docs/FEATURES.md for feature list
+   - docs/ARCHITECTURE.md for system design
    - task --list for all available commands
 
 🌐 Services will be available at:${webUrl}
    - API: http://localhost:3001
-   - Anvil Node: http://localhost:8545
+   - Anvil Node: http://localhost:3002
 
 ${isFullStack ? "🎨 Frontend stack: Next.js + RainbowKit + wagmi + shadcn/ui" : ""}
 ${isFullStack ? "🔥 Contract hot reload enabled!" : ""}

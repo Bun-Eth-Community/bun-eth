@@ -213,7 +213,7 @@ Clean separation of concerns:
 ## 📚 Documentation
 
 - [README.md](./README.md) - Getting started
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - System design
+- [ARCHITECTURE.md](ARCHITECTURE.md) - System design
 - [packages/hooks/README.md](./packages/hooks/README.md) - Hooks documentation
 - [packages/components/README.md](./packages/components/README.md) - Components documentation
 - [packages/foundry-deployer/README.md](./packages/foundry-deployer/README.md) - Hot reload system

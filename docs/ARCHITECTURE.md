@@ -331,7 +331,7 @@ User clicks button
 - **Use Cases**: Server-side operations
 
 ### Contracts ↔ Network
-- **Dev**: Anvil (localhost:8545)
+- **Dev**: Anvil (localhost:3002)
 - **Test**: Sepolia
 - **Prod**: Mainnet/L2s
 - **Library**: viem (publicClient)

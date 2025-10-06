@@ -130,7 +130,7 @@ task dev:up
 ```
 
 This starts:
-- Anvil local Ethereum node on `http://localhost:8545`
+- Anvil local Ethereum node on `http://localhost:3002`
 - Bun-Eth API on `http://localhost:3001`
 
 ### Start Web UI
@@ -372,12 +372,17 @@ const result = await client.contractCall({
 Copy `.env.example` to `.env` and configure:
 
 ```bash
+# Port Configuration (consecutive ports for easy management)
+WEB_PORT=3000
+API_PORT=3001
+ANVIL_PORT=3002
+
 # API Configuration
 PORT=3001
 NODE_ENV=development
 
 # Ethereum Node
-ANVIL_NODE=http://localhost:8545
+ANVIL_NODE=http://localhost:3002
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 
 # Network Configuration
@@ -523,8 +528,8 @@ Contributions are welcome! Please follow these steps:
 
 ## 📚 Documentation
 
-- **[FEATURES.md](./FEATURES.md)** - Complete feature list and comparisons
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - System design and architecture
+- **[FEATURES.md](docs/FEATURES.md)** - Complete feature list and comparisons
+- **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System design and architecture
 - **[packages/hooks/README.md](./packages/hooks/README.md)** - Custom hooks documentation
 - **[packages/components/README.md](./packages/components/README.md)** - UI components guide
 - **[packages/foundry-deployer/README.md](./packages/foundry-deployer/README.md)** - Hot reload system

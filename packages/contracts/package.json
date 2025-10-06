@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "compile": "forge build",
-    "deploy": "forge script script/Deploy.s.sol:DeployScript --rpc-url http://localhost:8545 --broadcast --legacy",
+    "deploy": "forge script script/Deploy.s.sol:DeployScript --rpc-url http://localhost:${ANVIL_PORT:-3002} --broadcast --legacy",
     "deploy:sepolia": "forge script script/Deploy.s.sol:DeployScript --rpc-url $SEPOLIA_RPC_URL --broadcast --verify",
     "test": "forge test -vv",
     "node": "anvil"

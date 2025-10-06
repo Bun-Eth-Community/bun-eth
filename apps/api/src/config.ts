@@ -1,7 +1,7 @@
 export const config = {
-  port: parseInt(process.env.PORT || "3001"),
+  port: parseInt(process.env.PORT || process.env.API_PORT || "3001"),
   nodeEnv: process.env.NODE_ENV || "development",
-  ethNode: process.env.ANVIL_NODE || process.env.HARDHAT_NODE || "http://localhost:8545",
+  ethNode: process.env.ANVIL_NODE || process.env.HARDHAT_NODE || `http://localhost:${process.env.ANVIL_PORT || "3002"}`,
   privateKey: process.env.PRIVATE_KEY || "",
   chainId: parseInt(process.env.CHAIN_ID || "31337"),
 };

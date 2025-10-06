@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev --turbo -p ${WEB_PORT:-3000}",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p ${WEB_PORT:-3000}",
     "lint": "next lint",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui"

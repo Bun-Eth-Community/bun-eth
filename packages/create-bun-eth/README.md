@@ -46,7 +46,7 @@ Perfect for building complete decentralized applications with a modern web inter
 **Services:**
 - Web UI: `http://localhost:3000`
 - API: `http://localhost:3001`
-- Anvil: `http://localhost:8545`
+- Anvil: `http://localhost:3002`
 
 ### Backend-Only
 
@@ -62,7 +62,7 @@ Perfect for APIs, bots, scripts, or when you want to build your own custom front
 
 **Services:**
 - API: `http://localhost:3001`
-- Anvil: `http://localhost:8545`
+- Anvil: `http://localhost:3002`
 
 ## Prerequisites
 
@@ -210,22 +210,23 @@ This will automatically find free ports and update your `.env` file.
 Copy `.env.example` to `.env` (done automatically by `task setup`):
 
 ```bash
+# Ports (consecutive for easy management)
+WEB_PORT=3000
+API_PORT=3001
+ANVIL_PORT=3002
+
 # API
 PORT=3001
 NODE_ENV=development
 
 # Ethereum
-ANVIL_NODE=http://localhost:8545
+ANVIL_NODE=http://localhost:3002
 CHAIN_ID=31337
 PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 
-# Ports (customize if defaults conflict)
-WEB_PORT=3000
-API_PORT=3001
-ANVIL_PORT=8545
-
 # Frontend (Full-Stack only)
 NEXT_PUBLIC_WC_PROJECT_ID=  # Get from https://cloud.walletconnect.com
+NEXT_PUBLIC_ANVIL_PORT=3002
 ```
 
 ## Documentation

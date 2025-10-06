@@ -37,7 +37,7 @@ export const config = createConfig({
   transports: {
     [mainnet.id]: http(),
     [sepolia.id]: http(),
-    [localhost.id]: http("http://localhost:8545"),
+    [localhost.id]: http(`http://localhost:${process.env.NEXT_PUBLIC_ANVIL_PORT || "3002"}`),
   },
   ssr: true,
 });

@@ -2,6 +2,12 @@ version: '3'
 
 vars:
   DOCKER_COMPOSE_FILE: ./docker/docker-compose.yml
+  WEB_PORT:
+    sh: echo ${WEB_PORT:-3000}
+  API_PORT:
+    sh: echo ${API_PORT:-3001}
+  ANVIL_PORT:
+    sh: echo ${ANVIL_PORT:-3002}
 
 tasks:
   # Installation
@@ -15,14 +21,23 @@ tasks:
     desc: Start local development stack (Web UI + API + Anvil node)
     cmds:
       - docker compose -f {{.DOCKER_COMPOSE_FILE}} up --build -d
+      - mkdir -p .task
+      - |
+        cd apps/web
+        nohup bun run dev > ../../.task/web.log 2>&1 &
+        WEB_PID=$!
+        cd ../..
+        echo $WEB_PID > .task/web.pid
       - echo "Development stack started"
       - echo ""
       - echo "Services:"
-      - echo "Web UI at http://localhost:3000"
-      - echo "API at http://localhost:3001"
-      - echo "Anvil at http://localhost:8545"
+      - echo "Web UI at http://localhost:{{.WEB_PORT}}"
+      - echo "API at http://localhost:{{.API_PORT}}"
+      - echo "Anvil at http://localhost:{{.ANVIL_PORT}}"
       - echo ""
-      - echo "Health check at http://localhost:3001/health"
+      - echo "View logs with task dev:logs:web, task dev:logs:api, or task dev:logs:anvil"
+      - echo ""
+      - echo "Health check at http://localhost:{{.API_PORT}}/health"
 
   dev:auto-ports:
     desc: Automatically find and configure free ports
@@ -33,6 +48,12 @@ tasks:
     desc: Stop local development stack
     cmds:
       - docker compose -f {{.DOCKER_COMPOSE_FILE}} down -v
+      - |
+        if [ -f .task/web.pid ]; then
+          kill $(cat .task/web.pid) 2>/dev/null || true
+          rm .task/web.pid
+          echo "Web dev server stopped"
+        fi
       - echo "Development stack stopped"
 
   dev:logs:
@@ -49,6 +70,17 @@ tasks:
     desc: View Anvil node logs
     cmds:
       - docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f anvil
+
+  dev:logs:web:
+    desc: View Web UI logs
+    cmds:
+      - |
+        if [ -f .task/web.log ]; then
+          tail -f .task/web.log
+        else
+          echo "Web dev server is not running or log file not found"
+          echo "Start it with: task dev:up"
+        fi
 
   dev:restart:
     desc: Restart development stack
@@ -67,7 +99,7 @@ tasks:
     desc: Deploy contracts to local network
     dir: packages/contracts
     cmds:
-      - forge script script/Deploy.s.sol:DeployScript --rpc-url http://localhost:8545 --broadcast --legacy
+      - forge script script/Deploy.s.sol:DeployScript --rpc-url http://localhost:{{.ANVIL_PORT}} --broadcast --legacy
       - task: contracts:generate
 
   contracts:deploy:sepolia:
@@ -233,7 +265,7 @@ tasks:
   check:health:
     desc: Check API health
     cmds:
-      - curl -s http://localhost:3001/health | jq .
+      - curl -s http://localhost:{{.API_PORT}}/health | jq .
 
   # Quick start
   start:
@@ -245,7 +277,7 @@ tasks:
       - echo ""
       - echo "🚀 Bun-Eth is ready!"
       - echo ""
-      - echo "Open http://localhost:3000 in your browser"
+      - echo "Open http://localhost:{{.WEB_PORT}} in your browser"
       - echo ""
       - echo "Next steps:"
       - echo "  - Deploy contracts with 'task contracts:deploy'"
