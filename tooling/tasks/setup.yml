@@ -1,0 +1,53 @@
+version: '3'
+
+tasks:
+  install:
+    desc: Install all dependencies
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - bun install
+
+  start:
+    desc: Quick start - install, compile, and run dev stack
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - task: install
+      - task: contracts:compile
+      - task: dev:up
+      - echo ""
+      - echo "🚀 Bun-Eth is ready!"
+      - echo ""
+      - echo "Open http://localhost:{{.WEB_PORT}} in your browser"
+      - echo ""
+      - echo "Next steps:"
+      - echo "  - Deploy contracts with 'task contracts:deploy'"
+      - echo "  - Run tests with 'task test'"
+      - echo "  - View logs with 'task dev:logs'"
+
+  setup:
+    desc: Complete local setup - env, install, compile, and test
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - echo "Starting complete local setup..."
+      - |
+        if [ ! -f .env ]; then
+          echo "Creating .env from .env.example..."
+          cp .env.example .env
+          echo ".env created"
+        else
+          echo ".env already exists"
+        fi
+      - echo "Installing dependencies..."
+      - task: install
+      - echo "Compiling contracts..."
+      - task: contracts:compile
+      - echo "Running tests..."
+      - bun test packages/core packages/sdk
+      - task: contracts:test
+      - echo ""
+      - echo "Setup complete! All tests passing."
+      - echo ""
+      - echo "Next steps:"
+      - echo "  - Start dev stack with 'task dev:up'"
+      - echo "  - Deploy contracts with 'task contracts:deploy'"
+      - echo "  - Check API health with 'task check:health'"

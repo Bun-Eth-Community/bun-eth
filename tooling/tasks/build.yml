@@ -1,0 +1,32 @@
+version: '3'
+
+tasks:
+  packages:
+    desc: Build all packages (libraries only, no apps)
+    dir: '{{.ROOT_DIR}}'
+    env:
+      NODE_ENV: production
+    cmds:
+      - bun run build
+
+  web:
+    desc: Build Next.js web app for deployment
+    dir: '{{.ROOT_DIR}}/apps/web'
+    env:
+      NODE_ENV: production
+    cmds:
+      - bun run build
+
+  all:
+    desc: Build everything (packages + web app)
+    dir: '{{.ROOT_DIR}}'
+    env:
+      NODE_ENV: production
+    cmds:
+      - bun run build:all
+
+  lint:
+    desc: Lint all packages
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - bun run lint

@@ -1,0 +1,69 @@
+version: '3'
+
+tasks:
+  unit:
+    desc: Run unit tests (core + sdk)
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - bun test packages/core packages/sdk
+
+  watch:
+    desc: Run tests in watch mode
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - bun test --watch packages/core packages/sdk
+
+  coverage:
+    desc: Run tests with coverage
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - bun test --coverage
+
+  contracts:
+    desc: Run contract tests only
+    cmds:
+      - task: contracts:test
+
+  api:
+    desc: Run API tests
+    dir: '{{.ROOT_DIR}}/apps/api'
+    cmds:
+      - bun test
+
+  sdk:
+    desc: Run SDK tests
+    dir: '{{.ROOT_DIR}}/packages/sdk'
+    cmds:
+      - bun test
+
+  core:
+    desc: Run core tests
+    dir: '{{.ROOT_DIR}}/packages/core'
+    cmds:
+      - bun test
+
+  e2e:
+    desc: Run end-to-end tests for web app
+    dir: '{{.ROOT_DIR}}/apps/web'
+    cmds:
+      - bun run test:e2e
+
+  e2e:ui:
+    desc: Run end-to-end tests in UI mode
+    dir: '{{.ROOT_DIR}}/apps/web'
+    cmds:
+      - bun run test:e2e:ui
+
+  e2e:template:
+    desc: Run template creation e2e tests
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - bun test tests/e2e/*.test.ts
+
+  all:
+    desc: Run all tests (unit + contracts + web e2e + template e2e)
+    cmds:
+      - task: unit
+      - task: contracts
+      - task: e2e
+      - task: e2e:template

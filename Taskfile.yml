@@ -4,6 +4,6 @@ dotenv: ['.env']
 
 includes:
   default:
-    taskfile: ./tooling/task/Taskfile.yml
+    taskfile: ./tooling/tasks/Taskfile.yml
     dir: .
     flatten: true

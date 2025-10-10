@@ -1,0 +1,35 @@
+version: '3'
+
+tasks:
+  all:
+    desc: Clean build artifacts and dependencies
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - rm -rf node_modules
+      - rm -rf apps/*/node_modules
+      - rm -rf packages/*/node_modules
+      - rm -rf packages/contracts/artifacts
+      - rm -rf packages/contracts/cache
+      - rm -rf packages/contracts/typechain-types
+      - echo "Cleaned all build artifacts"
+
+  cache:
+    desc: Clean Foundry cache and artifacts
+    dir: '{{.ROOT_DIR}}/packages/contracts'
+    cmds:
+      - rm -rf out cache
+      - echo "Cleaned contract artifacts"
+
+  web:
+    desc: Clean Next.js build artifacts
+    dir: '{{.ROOT_DIR}}/apps/web'
+    cmds:
+      - rm -rf .next
+      - echo "Cleaned Next.js build artifacts"
+
+  logs:
+    desc: Clean development logs
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - rm -rf .task/*.log
+      - echo "Cleaned development logs"

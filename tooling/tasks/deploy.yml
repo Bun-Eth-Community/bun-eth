@@ -1,0 +1,17 @@
+version: '3'
+
+tasks:
+  web:
+    desc: Build and prepare web app for deployment
+    cmds:
+      - task: build:web
+
+  contracts:local:
+    desc: Deploy contracts to local Anvil network
+    cmds:
+      - task: contracts:deploy
+
+  contracts:sepolia:
+    desc: Deploy contracts to Sepolia testnet
+    cmds:
+      - task: contracts:deploy:sepolia

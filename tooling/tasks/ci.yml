@@ -1,0 +1,27 @@
+version: '3'
+
+tasks:
+  validate:
+    desc: Run all CI validation checks (lint, test, build)
+    cmds:
+      - task: build:lint
+      - task: test:all
+      - task: build:all
+      - echo ""
+      - echo "✅ All CI checks passed!"
+
+  quick:
+    desc: Quick CI checks (lint + unit tests)
+    cmds:
+      - task: build:lint
+      - task: test:unit
+      - echo ""
+      - echo "✅ Quick CI checks passed!"
+
+  contracts:
+    desc: CI checks for contracts only
+    cmds:
+      - task: contracts:compile
+      - task: contracts:test
+      - echo ""
+      - echo "✅ Contract checks passed!"

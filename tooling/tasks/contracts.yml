@@ -1,0 +1,60 @@
+version: '3'
+
+tasks:
+  compile:
+    desc: Compile smart contracts
+    dir: '{{.ROOT_DIR}}/packages/contracts'
+    cmds:
+      - forge build
+
+  deploy:
+    desc: Deploy contracts to local network
+    dir: '{{.ROOT_DIR}}/packages/contracts'
+    cmds:
+      - forge script script/Deploy.s.sol:DeployScript --rpc-url http://localhost:{{.ANVIL_PORT}} --broadcast --legacy
+      - task: generate
+
+  deploy:sepolia:
+    desc: Deploy contracts to Sepolia testnet
+    dir: '{{.ROOT_DIR}}/packages/contracts'
+    cmds:
+      - |
+        if [ -z "$SEPOLIA_RPC_URL" ]; then
+          echo "❌ Error: SEPOLIA_RPC_URL not set"
+          echo ""
+          echo "Quick setup:"
+          echo "  1. cp .env.example .env"
+          echo "  2. Add SEPOLIA_RPC_URL to .env"
+          echo "  3. Add PRIVATE_KEY to .env"
+          echo ""
+          echo "See docs/DEPLOYMENT_GUIDE.md for detailed instructions"
+          exit 1
+        fi
+      - |
+        if [ -z "$PRIVATE_KEY" ]; then
+          echo "❌ Error: PRIVATE_KEY not set"
+          echo ""
+          echo "Add your wallet private key to .env file"
+          echo "See docs/DEPLOYMENT_GUIDE.md for instructions"
+          exit 1
+        fi
+      - FOUNDRY_DISABLE_NIGHTLY_WARNING=true forge script script/Deploy.s.sol:DeployScript --rpc-url $SEPOLIA_RPC_URL --private-key $PRIVATE_KEY --broadcast --verify --etherscan-api-key ${ETHERSCAN_API_KEY:-}
+
+  test:
+    desc: Run contract tests
+    dir: '{{.ROOT_DIR}}/packages/contracts'
+    cmds:
+      - forge test -vv
+
+  generate:
+    desc: Generate TypeScript from deployed contracts (enables hot reload)
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - bun run packages/foundry-deployer/src/cli.ts
+      - echo "✨ Contract types generated! Frontend will hot reload."
+
+  node:
+    desc: Run standalone Anvil node
+    dir: '{{.ROOT_DIR}}/packages/contracts'
+    cmds:
+      - anvil

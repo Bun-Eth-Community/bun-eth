@@ -1,0 +1,115 @@
+version: '3'
+
+tasks:
+  up:
+    desc: Start local development stack (Web UI + API + Anvil node)
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} up --build -d
+      - mkdir -p .task
+      - |
+        cd apps/web
+        nohup bun run dev > ../../.task/web.log 2>&1 &
+        WEB_PID=$!
+        cd ../..
+        echo $WEB_PID > .task/web.pid
+      - echo "Development stack started"
+      - echo ""
+      - echo "Services:"
+      - echo "Web UI at http://localhost:{{.WEB_PORT}}"
+      - echo "API at http://localhost:{{.API_PORT}}"
+      - echo "Anvil at http://localhost:{{.ANVIL_PORT}}"
+      - echo ""
+      - echo "View logs with task dev:logs:web, task dev:logs:api, or task dev:logs:anvil"
+      - echo ""
+      - echo "Health check at http://localhost:{{.API_PORT}}/health"
+
+  auto-ports:
+    desc: Automatically find and configure free ports
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - bash scripts/auto-port-setup.sh
+
+  down:
+    desc: Stop local development stack
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} down -v
+      - |
+        if [ -f .task/web.pid ]; then
+          kill $(cat .task/web.pid) 2>/dev/null || true
+          rm .task/web.pid
+          echo "Web dev server stopped"
+        fi
+      - echo "Development stack stopped"
+
+  logs:
+    desc: View logs from development stack
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f
+
+  logs:api:
+    desc: View API logs
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f api
+
+  logs:anvil:
+    desc: View Anvil node logs
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f anvil
+
+  logs:web:
+    desc: View Web UI logs
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - |
+        if [ -f .task/web.log ]; then
+          tail -f .task/web.log
+        else
+          echo "Web dev server is not running or log file not found"
+          echo "Start it with: task dev:up"
+        fi
+
+  restart:
+    desc: Restart development stack
+    cmds:
+      - task: down
+      - task: up
+
+  status:
+    desc: Show status of development stack
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - docker compose -f {{.DOCKER_COMPOSE_FILE}} ps
+
+  health:
+    desc: Check API health
+    cmds:
+      - curl -s http://localhost:{{.API_PORT}}/health | jq .
+
+  reset:
+    desc: Reset local blockchain state
+    cmds:
+      - task: down
+      - echo "Blockchain state reset"
+
+  web:
+    desc: Start Next.js development server
+    dir: '{{.ROOT_DIR}}/apps/web'
+    cmds:
+      - bun run dev
+
+  web:build:
+    desc: Build Next.js for production
+    dir: '{{.ROOT_DIR}}/apps/web'
+    cmds:
+      - bun run build
+
+  web:start:
+    desc: Start Next.js production server
+    dir: '{{.ROOT_DIR}}/apps/web'
+    cmds:
+      - bun run start

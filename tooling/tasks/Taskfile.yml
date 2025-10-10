@@ -1,0 +1,63 @@
+version: '3'
+
+vars:
+  ROOT_DIR:
+    sh: git rev-parse --show-toplevel || echo "."
+  DOCKER_COMPOSE_FILE:
+    sh: echo "{{.ROOT_DIR}}/docker/docker-compose.yml"
+  WEB_PORT:
+    sh: echo ${WEB_PORT:-3000}
+  API_PORT:
+    sh: echo ${API_PORT:-3001}
+  ANVIL_PORT:
+    sh: echo ${ANVIL_PORT:-3002}
+
+includes:
+  setup:
+    taskfile: ./setup.yml
+    aliases: [s]
+  dev:
+    taskfile: ./dev.yml
+    aliases: [d]
+  contracts:
+    taskfile: ./contracts.yml
+    aliases: [c]
+  test:
+    taskfile: ./test.yml
+    aliases: [t]
+  build:
+    taskfile: ./build.yml
+    aliases: [b]
+  deploy:
+    taskfile: ./deploy.yml
+  ci:
+    taskfile: ./ci.yml
+  clean:
+    taskfile: ./clean.yml
+
+# Convenience aliases for commonly used tasks (backward compatibility)
+tasks:
+  install:
+    desc: Install all dependencies
+    cmds:
+      - task: setup:install
+
+  start:
+    desc: Quick start - install, compile, and run dev stack
+    cmds:
+      - task: setup:start
+
+  lint:
+    desc: Lint all packages
+    cmds:
+      - task: build:lint
+
+  test:
+    desc: Run unit tests
+    cmds:
+      - task: test:unit
+
+  status:
+    desc: Show status of development stack
+    cmds:
+      - task: dev:status
