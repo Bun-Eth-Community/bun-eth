@@ -52,5 +52,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "degit": "^2.8.4"
   }
 }

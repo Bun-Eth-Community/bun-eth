@@ -1,9 +1,10 @@
 [test]
 # Exclude Playwright e2e tests from Bun's test runner
+# But allow our bun e2e tests in tests/e2e/
 exclude = [
   "**/node_modules/**",
   "**/dist/**",
   "**/.next/**",
-  "**/tests/e2e/**",
+  "apps/web/tests/e2e/**",
   "**/*.spec.ts"
 ]

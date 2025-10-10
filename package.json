@@ -8,10 +8,15 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "bun run --filter './apps/*' --filter './packages/*' build",
+    "build": "bun run --filter './packages/*' build",
+    "build:web": "bun run --filter '@bun-eth/web' build",
+    "build:all": "bun run build && bun run build:web",
+    "deploy:web": "bun run build:web",
     "dev": "bun run --filter './apps/api' dev",
     "test": "bun test packages/core packages/sdk",
     "test:e2e": "bun run --filter '@bun-eth/web' test:e2e",
+    "test:e2e:template": "bun test tests/e2e/*.test.ts",
+    "test:all": "bun test packages/core packages/sdk && bun test tests/e2e/*.test.ts",
     "lint": "bun run --filter './apps/*' --filter './packages/*' lint",
     "changeset": "changeset",
     "version": "changeset version",

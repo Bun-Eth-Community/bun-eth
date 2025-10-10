@@ -106,7 +106,27 @@ tasks:
     desc: Deploy contracts to Sepolia testnet
     dir: packages/contracts
     cmds:
-      - forge script script/Deploy.s.sol:DeployScript --rpc-url ${SEPOLIA_RPC_URL} --broadcast --verify
+      - |
+        if [ -z "$SEPOLIA_RPC_URL" ]; then
+          echo "❌ Error: SEPOLIA_RPC_URL not set"
+          echo ""
+          echo "Quick setup:"
+          echo "  1. cp .env.example .env"
+          echo "  2. Add SEPOLIA_RPC_URL to .env"
+          echo "  3. Add PRIVATE_KEY to .env"
+          echo ""
+          echo "See docs/DEPLOYMENT_GUIDE.md for detailed instructions"
+          exit 1
+        fi
+      - |
+        if [ -z "$PRIVATE_KEY" ]; then
+          echo "❌ Error: PRIVATE_KEY not set"
+          echo ""
+          echo "Add your wallet private key to .env file"
+          echo "See docs/DEPLOYMENT_GUIDE.md for instructions"
+          exit 1
+        fi
+      - FOUNDRY_DISABLE_NIGHTLY_WARNING=true forge script script/Deploy.s.sol:DeployScript --rpc-url $SEPOLIA_RPC_URL --private-key $PRIVATE_KEY --broadcast --verify --etherscan-api-key ${ETHERSCAN_API_KEY:-}
 
   contracts:test:
     desc: Run contract tests
@@ -128,24 +148,31 @@ tasks:
 
   # Building
   build:
-    desc: Build all packages
+    desc: Build all packages (libraries only, no apps)
     env:
       NODE_ENV: production
     cmds:
       - bun run build
 
-  build:api:
-    desc: Build API (no-op for Bun)
-    cmds:
-      - echo "No build needed for Bun - TypeScript runs directly"
-
   build:web:
-    desc: Build Next.js web app
+    desc: Build Next.js web app for deployment
     dir: apps/web
     env:
       NODE_ENV: production
     cmds:
       - bun run build
+
+  build:all:
+    desc: Build everything (packages + web app)
+    env:
+      NODE_ENV: production
+    cmds:
+      - bun run build:all
+
+  deploy:web:
+    desc: Build and prepare web app for deployment
+    cmds:
+      - task: build:web
 
   # Web Development
   web:dev:
@@ -175,7 +202,7 @@ tasks:
   test:watch:
     desc: Run tests in watch mode
     cmds:
-      - bun test --watch
+      - bun test --watch packages/core packages/sdk
 
   test:coverage:
     desc: Run tests with coverage
@@ -217,12 +244,18 @@ tasks:
     cmds:
       - bun run test:e2e:ui
 
+  test:e2e:template:
+    desc: Run template creation e2e tests
+    cmds:
+      - bun test tests/e2e/*.test.ts
+
   test:all:
-    desc: Run all tests (unit + contracts + e2e)
+    desc: Run all tests (unit + contracts + web e2e + template e2e)
     cmds:
       - task: test
       - task: test:contracts
       - task: test:e2e
+      - task: test:e2e:template
 
   # Linting
   lint:

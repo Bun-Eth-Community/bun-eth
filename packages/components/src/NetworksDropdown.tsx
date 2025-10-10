@@ -13,7 +13,7 @@ export const NetworksDropdown = () => {
   const { switchChain } = useSwitchChain();
 
   const handleSwitch = (chainId: number) => {
-    switchChain({ chainId });
+    switchChain({ chainId: chainId as any });
     setIsOpen(false);
   };
 

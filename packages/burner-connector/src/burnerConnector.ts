@@ -14,7 +14,7 @@ const DEFAULT_OPTIONS: Required<BurnerWalletOptions> = {
  * Creates an ephemeral wallet stored in localStorage for quick testing
  */
 export function burnerWalletConnector(options: BurnerWalletOptions = {}) {
-  const config = { ...DEFAULT_OPTIONS, ...options };
+  const walletConfig = { ...DEFAULT_OPTIONS, ...options };
 
   return createConnector((config) => ({
     id: "burner-wallet",
@@ -24,13 +24,13 @@ export function burnerWalletConnector(options: BurnerWalletOptions = {}) {
     async setup() {
       // Ensure we have a burner key on setup
       if (typeof window !== "undefined") {
-        getBurnerPrivateKey(config.storageKey);
+        getBurnerPrivateKey(walletConfig.storageKey);
       }
     },
 
-    async connect({ chainId } = {}) {
+    async connect({ chainId, withCapabilities }: { chainId?: number; isReconnecting?: boolean; withCapabilities?: boolean } = {}) {
       const provider = await this.getProvider();
-      const accounts = await this.getAccounts();
+      const addresses = await this.getAccounts();
       let currentChainId = await this.getChainId();
 
       if (chainId && chainId !== currentChainId) {
@@ -38,10 +38,15 @@ export function burnerWalletConnector(options: BurnerWalletOptions = {}) {
         currentChainId = chain.id;
       }
 
+      // Handle capabilities if requested
+      const accounts = withCapabilities
+        ? addresses.map(address => ({ address, capabilities: {} }))
+        : addresses;
+
       return {
         accounts,
         chainId: currentChainId,
-      };
+      } as any;
     },
 
     async disconnect() {
@@ -50,7 +55,7 @@ export function burnerWalletConnector(options: BurnerWalletOptions = {}) {
     },
 
     async getAccounts() {
-      const privateKey = getBurnerPrivateKey(config.storageKey);
+      const privateKey = getBurnerPrivateKey(walletConfig.storageKey);
       const account = privateKeyToAccount(privateKey);
       return [account.address];
     },
@@ -60,22 +65,22 @@ export function burnerWalletConnector(options: BurnerWalletOptions = {}) {
       if (!provider) return 31337; // Default to localhost
 
       // For burner wallet, we'll use the first allowed chain
-      return config.allowedChainIds[0];
+      return walletConfig.allowedChainIds[0];
     },
 
     async isAuthorized() {
       // Burner wallet is always "authorized" if we have a key
       if (typeof window === "undefined") return false;
 
-      const key = window.localStorage.getItem(config.storageKey);
+      const key = window.localStorage.getItem(walletConfig.storageKey);
       return !!key;
     },
 
     async switchChain({ chainId }) {
       // Check if chain is allowed
-      if (!config.allowedChainIds.includes(chainId)) {
+      if (!walletConfig.allowedChainIds.includes(chainId)) {
         throw new Error(
-          `Burner wallet only works on localhost (${config.allowedChainIds.join(", ")})`
+          `Burner wallet only works on localhost (${walletConfig.allowedChainIds.join(", ")})`
         );
       }
 
@@ -105,11 +110,11 @@ export function burnerWalletConnector(options: BurnerWalletOptions = {}) {
       };
     },
 
-    onAccountsChanged(accounts) {
+    onAccountsChanged(accounts: string[]) {
       if (accounts.length === 0) {
         this.onDisconnect();
       } else {
-        config.emitter.emit("change", { accounts });
+        config.emitter.emit("change", { accounts: accounts as readonly Address[] });
       }
     },
 

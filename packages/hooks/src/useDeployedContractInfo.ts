@@ -35,7 +35,7 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(
           return;
         }
 
-        const contract = deployedContracts.default?.[chainId]?.[contractName];
+        const contract = (deployedContracts.default as any)?.[chainId]?.[contractName];
 
         if (contract) {
           // Verify contract is deployed by checking bytecode

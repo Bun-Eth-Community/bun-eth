@@ -1,0 +1,25 @@
+# Template Configuration
+# Files/directories to exclude when using "Use this template" or degit
+
+# Development artifacts
+.changeset/** export-ignore
+.task/** export-ignore
+*.log export-ignore
+
+# Package changelogs (template shouldn't have history)
+**/CHANGELOG.md export-ignore
+
+# Publishing & contribution docs (template-specific)
+docs/PUBLISHING.md export-ignore
+CONTRIBUTING.md export-ignore
+
+# Template proposal (implementation-specific)
+TEMPLATE_PROPOSAL.md export-ignore
+
+# Keep these core docs:
+# README.md
+# docs/ARCHITECTURE.md
+# docs/FEATURES.md
+# docs/QUICKSTART.md
+# docs/DEPLOYMENT_GUIDE.md
+# LICENSE

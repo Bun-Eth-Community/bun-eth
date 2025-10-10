@@ -4,8 +4,9 @@ import { $ } from "bun";
 import { existsSync } from "fs";
 import { join } from "path";
 import * as readline from "readline";
+import degit from "degit";
 
-const REPO_URL = "https://github.com/Bun-Eth-Community/bun-eth.git";
+const REPO_PATH = "Bun-Eth-Community/bun-eth";
 
 type ProjectType = "full-stack" | "backend-only";
 
@@ -172,13 +173,14 @@ async function scaffoldProject(projectName: string, projectType: ProjectType) {
   console.log(`\n🚀 Creating ${typeLabel}: ${projectName}\n`);
 
   try {
-    // Clone the template repository
-    console.log("📦 Cloning template repository...");
-    await $`git clone --depth 1 ${REPO_URL} ${targetDir}`;
+    // Clone the template repository using degit (no git history)
+    console.log("📦 Downloading template...");
+    const emitter = degit(REPO_PATH, {
+      cache: false,
+      force: true,
+    });
 
-    // Remove .git directory to start fresh
-    console.log("🧹 Cleaning up...");
-    await $`rm -rf ${join(targetDir, ".git")}`;
+    await emitter.clone(targetDir);
 
     // Remove frontend files if backend-only
     if (!isFullStack) {

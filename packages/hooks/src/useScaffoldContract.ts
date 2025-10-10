@@ -14,7 +14,7 @@ export const useScaffoldContract = <
 >(
   config: UseScaffoldContractConfig<TContractName, TWalletClient>
 ) => {
-  const { contractName, walletClient: useWalletClient = false } = config;
+  const { contractName, walletClient: shouldUseWalletClient = false } = config;
   const deployedContractInfo = useDeployedContractInfo(contractName);
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
@@ -23,7 +23,7 @@ export const useScaffoldContract = <
     return null;
   }
 
-  const client = useWalletClient && walletClient ? walletClient : publicClient;
+  const client = shouldUseWalletClient && walletClient ? walletClient : publicClient;
 
   if (!client) {
     return null;
@@ -34,7 +34,7 @@ export const useScaffoldContract = <
     abi: deployedContractInfo.abi,
     client: {
       public: publicClient!,
-      wallet: useWalletClient ? walletClient : undefined,
+      wallet: shouldUseWalletClient ? walletClient : undefined,
     },
   });
 };

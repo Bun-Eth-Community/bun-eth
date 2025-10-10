@@ -12,7 +12,7 @@ export const BurnerWalletInfo = () => {
   const [copied, setCopied] = useState(false);
 
   const isBurner = connector?.id === "burner-wallet";
-  const isLocalhost = chain?.id === 31337;
+  const isLocalhost = chain?.id === (31337 as any);
 
   if (!isBurner || !isLocalhost) {
     return null;

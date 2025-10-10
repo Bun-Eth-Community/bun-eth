@@ -2,14 +2,11 @@ import { useReadContract } from "wagmi";
 import { useDeployedContractInfo } from "./useDeployedContractInfo";
 import { useTargetNetwork } from "./useTargetNetwork";
 import type { ContractName } from "./types";
-import type { Abi, ExtractAbiFunctionNames } from "viem";
+import type { Abi } from "viem";
 
-type UseScaffoldReadConfig<
-  TAbi extends Abi,
-  TFunctionName extends ExtractAbiFunctionNames<TAbi, "pure" | "view">
-> = {
+type UseScaffoldReadConfig = {
   contractName: ContractName;
-  functionName: TFunctionName;
+  functionName: string;
   args?: any[];
   watch?: boolean;
 };
@@ -19,11 +16,8 @@ type UseScaffoldReadConfig<
  * @param config - contract name, function name, args, and watch options
  * @returns contract read result from wagmi
  */
-export const useScaffoldReadContract = <
-  TAbi extends Abi,
-  TFunctionName extends ExtractAbiFunctionNames<TAbi, "pure" | "view">
->(
-  config: UseScaffoldReadConfig<TAbi, TFunctionName>
+export const useScaffoldReadContract = (
+  config: UseScaffoldReadConfig
 ) => {
   const { contractName, functionName, args, watch = true } = config;
   const deployedContractInfo = useDeployedContractInfo(contractName);

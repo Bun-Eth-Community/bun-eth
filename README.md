@@ -36,6 +36,23 @@ cd my-dapp
 task setup
 ```
 
+The CLI will:
+- Download the latest template (without git history)
+- Let you choose between Full-Stack or Backend-Only
+- Set up your project name
+- Initialize a fresh git repository
+
+### Using as GitHub Template
+
+Click the **"Use this template"** button at the top of the repository to create your own copy.
+
+Then:
+```bash
+git clone https://github.com/YOUR_USERNAME/your-project.git
+cd your-project
+task setup
+```
+
 ### Manual Clone
 
 ```bash
@@ -315,6 +332,19 @@ task test:sdk
 task test:core
 ```
 
+### End-to-End Tests
+
+```bash
+# Web app e2e tests
+task test:e2e
+
+# Template creation e2e tests (validates the entire CLI workflow)
+task test:e2e:template
+
+# Run all tests (unit + contracts + e2e + template e2e)
+task test:all
+```
+
 ### Watch Mode
 
 ```bash
@@ -496,21 +526,26 @@ task check:health        # Check API health
 
 ## 🚢 Deployment
 
-### Deploy to Production
+### Deploy Contracts to Testnet
 
-1. Set environment variables:
+See **[DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)** for detailed instructions.
+
+Quick start for Sepolia:
+
+1. Configure `.env`:
 ```bash
-export NODE_ENV=production
-export PRIVATE_KEY=your_private_key
-export SEPOLIA_RPC_URL=your_rpc_url
+cp .env.example .env
+# Add SEPOLIA_RPC_URL, PRIVATE_KEY, and ETHERSCAN_API_KEY
 ```
 
-2. Deploy contracts:
+2. Deploy:
 ```bash
 task contracts:deploy:sepolia
 ```
 
-3. Build and deploy API:
+### Deploy API to Production
+
+Build and run with Docker:
 ```bash
 docker build -f apps/api/Dockerfile -t bun-eth-api .
 docker run -p 3001:3001 --env-file .env bun-eth-api
@@ -528,6 +563,7 @@ Contributions are welcome! Please follow these steps:
 
 ## 📚 Documentation
 
+- **[DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)** - Deploy to testnets and mainnet
 - **[FEATURES.md](docs/FEATURES.md)** - Complete feature list and comparisons
 - **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System design and architecture
 - **[packages/hooks/README.md](./packages/hooks/README.md)** - Custom hooks documentation

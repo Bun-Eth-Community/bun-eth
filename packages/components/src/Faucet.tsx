@@ -21,7 +21,7 @@ export const Faucet = ({ onClose }: FaucetProps) => {
   const { data: walletClient } = useWalletClient();
 
   // Only enable on local network
-  const isLocalNetwork = chain?.id === 31337;
+  const isLocalNetwork = chain?.id === (31337 as any);
 
   const handleSend = async () => {
     if (!walletClient || !isLocalNetwork || !address || !amount) {

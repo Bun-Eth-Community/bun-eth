@@ -36,7 +36,8 @@
       "Bash(chmod:*)",
       "Bash(bash:*)",
       "Read(//private/tmp/**)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 forge script script/Deploy.s.sol:DeployScript --rpc-url http://localhost:3002 --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 --broadcast --legacy)"
     ],
     "deny": [],
     "ask": []
