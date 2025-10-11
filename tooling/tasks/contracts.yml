@@ -38,7 +38,7 @@ tasks:
           echo "See docs/DEPLOYMENT_GUIDE.md for instructions"
           exit 1
         fi
-      - FOUNDRY_DISABLE_NIGHTLY_WARNING=true forge script script/Deploy.s.sol:DeployScript --rpc-url $SEPOLIA_RPC_URL --private-key $PRIVATE_KEY --broadcast --verify --etherscan-api-key ${ETHERSCAN_API_KEY:-}
+      - forge script script/Deploy.s.sol:DeployScript --rpc-url $SEPOLIA_RPC_URL --private-key $PRIVATE_KEY --broadcast --verify --etherscan-api-key ${ETHERSCAN_API_KEY:-}
 
   test:
     desc: Run contract tests

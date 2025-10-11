@@ -7,6 +7,9 @@ optimizer = true
 optimizer_runs = 200
 via_ir = false
 
+# Note: To disable nightly build warnings, set FOUNDRY_DISABLE_NIGHTLY_WARNING=true
+# in your .env file (already configured in .env.example)
+
 [rpc_endpoints]
 localhost = "http://127.0.0.1:8545"
 sepolia = "${SEPOLIA_RPC_URL}"
