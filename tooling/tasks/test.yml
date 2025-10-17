@@ -54,6 +54,49 @@ tasks:
     cmds:
       - bun run test:e2e:ui
 
+  e2e:complete:
+    desc: Run complete E2E test suite (all layers - requires dev server running)
+    dir: '{{.ROOT_DIR}}/apps/web'
+    cmds:
+      - echo "Running complete E2E test suite..."
+      - echo "Note - Make sure dev server is running (task dev:up)"
+      - bunx playwright test e2e/complete-test-suite.spec.ts --config=playwright.screenshots.config.ts
+      - echo ""
+      - echo "View results - bunx playwright show-report"
+
+  e2e:visual:
+    desc: Run visual regression tests only
+    dir: '{{.ROOT_DIR}}/apps/web'
+    cmds:
+      - bunx playwright test e2e/visual-regression.spec.ts --config=playwright.screenshots.config.ts
+
+  e2e:accessibility:
+    desc: Run accessibility tests (WCAG 2.1 AA)
+    dir: '{{.ROOT_DIR}}/apps/web'
+    cmds:
+      - bunx playwright test e2e/accessibility.spec.ts --config=playwright.screenshots.config.ts
+
+  e2e:performance:
+    desc: Run performance tests
+    dir: '{{.ROOT_DIR}}/apps/web'
+    cmds:
+      - bunx playwright test e2e/performance.spec.ts --config=playwright.screenshots.config.ts
+
+  e2e:responsive:
+    desc: Run responsive design tests
+    dir: '{{.ROOT_DIR}}/apps/web'
+    cmds:
+      - bunx playwright test e2e/responsive.spec.ts --config=playwright.screenshots.config.ts
+
+  e2e:screenshots:
+    desc: Generate UI screenshots for documentation
+    dir: '{{.ROOT_DIR}}/apps/web'
+    cmds:
+      - echo "Generating screenshots..."
+      - bunx playwright test e2e/visual-regression.spec.ts --config=playwright.screenshots.config.ts
+      - echo ""
+      - echo "Screenshots saved to docs/screenshots/"
+
   e2e:template:
     desc: Run template creation e2e tests
     dir: '{{.ROOT_DIR}}'

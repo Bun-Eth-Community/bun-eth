@@ -22,7 +22,7 @@ A **pure Bun-native monorepo template** for building Ethereum-based applications
 - 🔨 **Foundry Contracts** - Blazing fast Rust-based smart contract framework (Forge + Anvil)
 - 🐳 **Docker Compose** - Complete local development environment
 - 📦 **Clean Monorepo** - Well-architected packages with clear separation of concerns
-- 🧪 **Comprehensive Testing** - Bun tests for TypeScript, Foundry tests for Solidity
+- 🧪 **Comprehensive Testing** - Multi-layer E2E testing (visual regression, accessibility, performance, responsive), Bun tests for TypeScript, Foundry tests for Solidity
 - 🔧 **Taskfile** - Powerful command orchestration
 - 💎 **Full TypeScript** - Type safety from contracts to UI
 
@@ -334,9 +334,45 @@ task test:core
 
 ### End-to-End Tests
 
+The template includes a comprehensive E2E testing suite covering multiple quality dimensions:
+
+#### Complete Test Suite
+
 ```bash
-# Web app e2e tests
+# Run complete E2E test suite (all layers)
+task test:e2e:complete
+
+# View results
+cd apps/web && bunx playwright show-report
+```
+
+#### Individual Test Layers
+
+```bash
+# Visual regression testing (screenshot comparison)
+task test:e2e:visual
+
+# Accessibility testing (WCAG 2.1 AA compliance)
+task test:e2e:accessibility
+
+# Performance testing (load times, bundle sizes)
+task test:e2e:performance
+
+# Responsive design testing (multiple viewports)
+task test:e2e:responsive
+
+# Generate UI screenshots for documentation
+task test:e2e:screenshots
+```
+
+#### Standard E2E Tests
+
+```bash
+# Web app e2e tests (with webServer)
 task test:e2e
+
+# Run e2e tests in UI mode
+task test:e2e:ui
 
 # Template creation e2e tests (validates the entire CLI workflow)
 task test:e2e:template
@@ -344,6 +380,26 @@ task test:e2e:template
 # Run all tests (unit + contracts + e2e + template e2e)
 task test:all
 ```
+
+#### E2E Testing Features
+
+- **Visual Regression** - Automatic screenshot comparison to detect UI changes
+- **Accessibility** - WCAG 2.1 AA compliance testing with axe-core
+- **Performance** - Load time metrics, bundle size analysis, LCP/FCP tracking
+- **Responsive Design** - Cross-device testing (mobile, tablet, desktop)
+- **RPC Mocking** - Test contract states without real transactions
+- **Time Manipulation** - Test time-dependent contracts with Anvil
+
+**Test Results:**
+- Screenshots saved to `docs/screenshots/`
+- Test reports saved to `docs/test-results/`
+- Accessibility violations logged with actionable fixes
+- Performance metrics tracked over time
+
+**Documentation:**
+- See [docs/E2E_TESTING_GUIDE.md](docs/E2E_TESTING_GUIDE.md) for detailed guide
+- Examples of all test types included
+- Integration with CI/CD pipelines
 
 ### Watch Mode
 

@@ -12,13 +12,9 @@
   },
   "scripts": {
     "test": "bun test",
-    "lint": "echo 'No linting configured'"
+    "lint": "biome check .",
+    "lint:fix": "biome check --write ."
   },
-  "keywords": [
-    "ethereum",
-    "bun",
-    "core",
-    "utilities"
-  ],
+  "keywords": ["ethereum", "bun", "core", "utilities"],
   "license": "MIT"
 }

@@ -16,7 +16,7 @@ export function formatEther(wei: bigint): string {
  * Parses ether string to wei
  */
 export function parseEther(ether: string): bigint {
-  return BigInt(Math.floor(parseFloat(ether) * 1e18));
+  return BigInt(Math.floor(Number.parseFloat(ether) * 1e18));
 }
 
 /**

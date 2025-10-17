@@ -14,4 +14,16 @@ via_ir = false
 localhost = "http://127.0.0.1:8545"
 sepolia = "${SEPOLIA_RPC_URL}"
 
+# Forge Formatter Configuration
+# Run 'forge fmt' to format all Solidity files
+[fmt]
+line_length = 120
+tab_width = 4
+bracket_spacing = false
+int_types = "long"
+multiline_func_header = "all"
+quote_style = "double"
+number_underscore = "thousands"
+wrap_comments = true
+
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options

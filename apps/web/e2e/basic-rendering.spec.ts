@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.describe('Basic Web App Rendering', () => {
   test('should load the homepage and display key elements', async ({ page }) => {

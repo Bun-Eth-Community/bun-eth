@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { Providers } from "@/components/providers";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { Providers } from '@/components/providers';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Bun-Eth App",
-  description: "Ethereum dApp built with Bun, Next.js, and Foundry",
+  title: 'Bun-Eth App',
+  description: 'Ethereum dApp built with Bun, Next.js, and Foundry',
 };
 
 export default function RootLayout({

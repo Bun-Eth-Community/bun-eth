@@ -6,7 +6,8 @@
     "dev": "next dev --turbo -p ${WEB_PORT:-3000}",
     "build": "next build",
     "start": "next start -p ${WEB_PORT:-3000}",
-    "lint": "next lint",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui"
   },
@@ -36,9 +37,13 @@
     "wagmi": "^2.16.4"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@biomejs/biome": "^1.9.4",
     "@playwright/test": "^1.55.1",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@types/node": "^20.11.5",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.4.17",
     "node-fetch": "^2.7.0",
     "pino-pretty": "^13.1.1",

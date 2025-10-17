@@ -6,7 +6,8 @@
   "types": "./src/index.ts",
   "scripts": {
     "test": "bun test",
-    "lint": "echo 'No linting configured'"
+    "lint": "biome check .",
+    "lint:fix": "biome check --write ."
   },
   "dependencies": {
     "@bun-eth/core": "workspace:*"

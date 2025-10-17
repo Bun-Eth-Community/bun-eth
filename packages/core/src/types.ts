@@ -18,7 +18,7 @@ export interface TransactionResponse {
   to: string;
   value: string;
   blockNumber?: number;
-  status?: "pending" | "confirmed" | "failed";
+  status?: 'pending' | 'confirmed' | 'failed';
 }
 
 export interface ContractCallRequest {
@@ -38,7 +38,7 @@ export interface ApiError {
 }
 
 export interface HealthResponse {
-  status: "ok" | "error";
+  status: 'ok' | 'error';
   timestamp: number;
   version: string;
   network?: {

@@ -1,9 +1,15 @@
-"use client";
+'use client';
 
-import { WalletConnect } from "@/components/wallet-connect";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Address, Balance, FaucetButton, NetworksDropdown, BurnerWalletInfo } from "@bun-eth/components";
-import { useAccount, useBlockNumber } from "wagmi";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { WalletConnect } from '@/components/wallet-connect';
+import {
+  Address,
+  Balance,
+  BurnerWalletInfo,
+  FaucetButton,
+  NetworksDropdown,
+} from '@bun-eth/components';
+import { useAccount, useBlockNumber } from 'wagmi';
 
 export default function Home() {
   const { isConnected, address } = useAccount();
@@ -37,9 +43,7 @@ export default function Home() {
             <div className="flex justify-between items-start">
               <div>
                 <CardTitle>Wallet Status</CardTitle>
-                <CardDescription>
-                  Your connection to the Ethereum network
-                </CardDescription>
+                <CardDescription>Your connection to the Ethereum network</CardDescription>
               </div>
               {isConnected && <FaucetButton />}
             </div>
@@ -58,7 +62,7 @@ export default function Home() {
                 <div>
                   <p className="text-sm text-muted-foreground mb-2">Current Block</p>
                   <p className="font-mono font-medium">
-                    {blockNumber ? `#${blockNumber}` : "Loading..."}
+                    {blockNumber ? `#${blockNumber}` : 'Loading...'}
                   </p>
                 </div>
               </>
@@ -192,7 +196,9 @@ export default function Home() {
                   <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
                     task web:dev
                   </code>
-                  <p className="text-muted-foreground mt-1">Start the frontend (already running!)</p>
+                  <p className="text-muted-foreground mt-1">
+                    Start the frontend (already running!)
+                  </p>
                 </div>
               </div>
             </div>

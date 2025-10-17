@@ -1,21 +1,21 @@
-import { expect, test, describe, beforeAll, afterAll } from "bun:test";
-import { createClient } from "./client";
+import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
+import { createClient } from './client';
 
-describe("BunEthClient", () => {
+describe('BunEthClient', () => {
   const client = createClient({
-    baseUrl: "http://localhost:3001",
+    baseUrl: 'http://localhost:3001',
     timeout: 5000,
   });
 
-  test("creates client instance", () => {
+  test('creates client instance', () => {
     expect(client).toBeDefined();
-    expect(typeof client.health).toBe("function");
-    expect(typeof client.getWallet).toBe("function");
+    expect(typeof client.health).toBe('function');
+    expect(typeof client.getWallet).toBe('function');
   });
 
   // Note: Integration tests require running API server
-  test.skip("health check", async () => {
+  test.skip('health check', async () => {
     const health = await client.health();
-    expect(health.status).toBe("ok");
+    expect(health.status).toBe('ok');
   });
 });

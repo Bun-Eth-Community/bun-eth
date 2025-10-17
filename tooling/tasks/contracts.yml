@@ -46,6 +46,18 @@ tasks:
     cmds:
       - forge test -vv
 
+  lint:
+    desc: Format and check smart contracts with forge fmt
+    dir: '{{.ROOT_DIR}}/packages/contracts'
+    cmds:
+      - forge fmt --check
+
+  format:
+    desc: Format smart contracts with forge fmt
+    dir: '{{.ROOT_DIR}}/packages/contracts'
+    cmds:
+      - forge fmt
+
   generate:
     desc: Generate TypeScript from deployed contracts (enables hot reload)
     dir: '{{.ROOT_DIR}}'

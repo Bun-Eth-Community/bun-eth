@@ -65,8 +65,15 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
       - name: Install dependencies
         run: bun install
 
-      - name: Run lint
+      - name: Run TypeScript lint
         run: bun run lint
+
+      - name: Run Solidity lint
+        working-directory: packages/contracts
+        run: forge fmt --check

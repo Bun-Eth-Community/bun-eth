@@ -26,7 +26,8 @@ tasks:
       - bun run build:all
 
   lint:
-    desc: Lint all packages
+    desc: Lint all packages (TypeScript + Solidity)
     dir: '{{.ROOT_DIR}}'
     cmds:
       - bun run lint
+      - task: contracts:lint

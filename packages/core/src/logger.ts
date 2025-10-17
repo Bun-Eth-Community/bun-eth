@@ -1,4 +1,4 @@
-type LogLevel = "debug" | "info" | "warn" | "error";
+type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 interface LoggerOptions {
   level?: LogLevel;
@@ -17,8 +17,8 @@ export class Logger {
   private prefix: string;
 
   constructor(options: LoggerOptions = {}) {
-    this.level = options.level || "info";
-    this.prefix = options.prefix || "";
+    this.level = options.level || 'info';
+    this.prefix = options.prefix || '';
   }
 
   private shouldLog(level: LogLevel): boolean {
@@ -27,31 +27,31 @@ export class Logger {
 
   private formatMessage(level: LogLevel, message: string, ...args: any[]): string {
     const timestamp = new Date().toISOString();
-    const prefix = this.prefix ? `[${this.prefix}] ` : "";
+    const prefix = this.prefix ? `[${this.prefix}] ` : '';
     return `${timestamp} ${level.toUpperCase()} ${prefix}${message}`;
   }
 
   debug(message: string, ...args: any[]): void {
-    if (this.shouldLog("debug")) {
-      console.debug(this.formatMessage("debug", message), ...args);
+    if (this.shouldLog('debug')) {
+      console.debug(this.formatMessage('debug', message), ...args);
     }
   }
 
   info(message: string, ...args: any[]): void {
-    if (this.shouldLog("info")) {
-      console.info(this.formatMessage("info", message), ...args);
+    if (this.shouldLog('info')) {
+      console.info(this.formatMessage('info', message), ...args);
     }
   }
 
   warn(message: string, ...args: any[]): void {
-    if (this.shouldLog("warn")) {
-      console.warn(this.formatMessage("warn", message), ...args);
+    if (this.shouldLog('warn')) {
+      console.warn(this.formatMessage('warn', message), ...args);
     }
   }
 
   error(message: string, ...args: any[]): void {
-    if (this.shouldLog("error")) {
-      console.error(this.formatMessage("error", message), ...args);
+    if (this.shouldLog('error')) {
+      console.error(this.formatMessage('error', message), ...args);
     }
   }
 }
