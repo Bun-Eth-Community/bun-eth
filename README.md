@@ -23,7 +23,9 @@ A **pure Bun-native monorepo template** for building Ethereum-based applications
 - 🐳 **Docker Compose** - Complete local development environment
 - 📦 **Clean Monorepo** - Well-architected packages with clear separation of concerns
 - 🧪 **Comprehensive Testing** - Multi-layer E2E testing (visual regression, accessibility, performance, responsive), Bun tests for TypeScript, Foundry tests for Solidity
-- 🔧 **Taskfile** - Powerful command orchestration
+- 🎨 **Biome Linting** - Fast, Bun-native linting and formatting (10-100x faster than ESLint)
+- 🔧 **Forge Formatting** - Built-in Solidity formatting and linting
+- 📋 **Taskfile** - Powerful command orchestration
 - 💎 **Full TypeScript** - Type safety from contracts to UI
 
 ## 🚀 Quick Start
@@ -413,6 +415,72 @@ task test:watch
 task test:coverage
 ```
 
+## 🎨 Code Quality & Linting
+
+The project uses **Biome** for TypeScript/JavaScript linting and **Forge** for Solidity formatting.
+
+### Why Biome?
+
+Biome is a fast, Bun-native linter and formatter that replaces ESLint and Prettier:
+- ⚡ **10-100x faster** than ESLint
+- 🦀 **Rust-based** - Native performance
+- 🎯 **Zero config** - Works out of the box
+- 🔧 **Auto-fix** - Automatically fixes issues
+- 📦 **Single tool** - Replaces ESLint + Prettier
+
+### Linting Commands
+
+```bash
+# Lint all packages (TypeScript + Solidity)
+task lint
+
+# Lint and auto-fix TypeScript issues
+task lint:fix
+
+# Lint Solidity contracts
+task contracts:lint
+
+# Format Solidity contracts
+task contracts:format
+```
+
+### Manual Linting
+
+```bash
+# Lint specific package
+cd packages/core
+bun run lint
+
+# Auto-fix issues
+bunx biome check --write .
+
+# Unsafe auto-fix (includes recommended changes)
+bunx biome check --write --unsafe .
+```
+
+### Solidity Formatting
+
+```bash
+# Check Solidity formatting
+cd packages/contracts
+forge fmt --check
+
+# Format Solidity files
+forge fmt
+```
+
+### CI/CD Integration
+
+All linting is enforced in GitHub Actions:
+- Biome checks all TypeScript/JavaScript files
+- Forge checks all Solidity files
+- Pull requests must pass linting to merge
+
+### Configuration
+
+- **Biome**: `biome.json` at project root
+- **Forge**: `packages/contracts/foundry.toml` (see `[fmt]` section)
+
 ## 📦 Using the SDK
 
 Install in your project:
@@ -567,12 +635,18 @@ task contracts:compile   # Compile smart contracts
 task contracts:deploy    # Deploy to local network + generate types (🔥 hot reload)
 task contracts:generate  # Generate TypeScript from deployed contracts
 task contracts:test      # Run contract tests
+task contracts:lint      # Check Solidity formatting
+task contracts:format    # Format Solidity files
 
 # Testing
 task test                # Run all tests
 task test:core           # Run core utility tests only
 task test:sdk            # Run SDK tests only
 task test:contracts      # Run contract tests only
+
+# Code Quality
+task lint                # Lint all packages (TypeScript + Solidity)
+task lint:fix            # Lint and auto-fix TypeScript issues
 
 # Other
 task clean               # Clean build artifacts
@@ -619,6 +693,8 @@ Contributions are welcome! Please follow these steps:
 
 ## 📚 Documentation
 
+- **[E2E_TESTING_GUIDE.md](docs/E2E_TESTING_GUIDE.md)** - Comprehensive E2E testing guide
+- **[IMPROVEMENTS_SUMMARY.md](docs/IMPROVEMENTS_SUMMARY.md)** - Latest improvements and features
 - **[DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)** - Deploy to testnets and mainnet
 - **[FEATURES.md](docs/FEATURES.md)** - Complete feature list and comparisons
 - **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System design and architecture
