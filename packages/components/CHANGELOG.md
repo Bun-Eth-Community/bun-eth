@@ -1,5 +1,18 @@
 # @bun-eth/components
 
+## 0.2.1
+
+### Patch Changes
+
+- feat: add Turborepo, Sherif, and @t3-oss/env integration
+
+  - Components and hooks now have proper @types/react dependencies
+  - create-bun-eth now uses npm packages instead of copying source
+  - Improved monorepo tooling with Turbo and Sherif
+
+- Updated dependencies
+  - @bun-eth/hooks@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

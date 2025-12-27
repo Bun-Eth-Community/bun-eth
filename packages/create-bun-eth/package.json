@@ -1,6 +1,6 @@
 {
   "name": "create-bun-eth",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Scaffold a Bun-first Ethereum project - Full-Stack dApp or Backend-Only API",
   "bin": {
     "create-bun-eth": "./src/index.ts"

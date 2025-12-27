@@ -1,6 +1,6 @@
 {
   "name": "@bun-eth/components",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Reusable Web3 UI components for Bun-Eth",
   "main": "./src/index.ts",
   "module": "./src/index.ts",

@@ -1,6 +1,6 @@
 {
   "name": "@bun-eth/hooks",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Custom React hooks for Web3 interactions with Bun-Eth",
   "main": "./src/index.ts",
   "module": "./src/index.ts",
