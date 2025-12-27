@@ -58,9 +58,9 @@ async function restorePackageJsons(backups: Map<string, string>): Promise<void> 
 async function main() {
   console.log('Starting release process...\n');
 
-  // Step 1: Build packages
+  // Step 1: Build packages (only packages, not apps)
   console.log('Step 1: Building packages...');
-  await $`bun run build`;
+  await $`turbo run build --filter='./packages/*'`;
 
   // Step 2: Backup package.json files
   console.log('\nStep 2: Backing up package.json files...');
