@@ -7,15 +7,15 @@ tasks:
     env:
       NODE_ENV: production
     cmds:
-      - bun run build
+      - turbo run build --filter='./packages/*'
 
   web:
     desc: Build Next.js web app for deployment
-    dir: '{{.ROOT_DIR}}/apps/web'
+    dir: '{{.ROOT_DIR}}'
     env:
       NODE_ENV: production
     cmds:
-      - bun run build
+      - turbo run build --filter='@bun-eth/web'
 
   all:
     desc: Build everything (packages + web app)
@@ -23,11 +23,12 @@ tasks:
     env:
       NODE_ENV: production
     cmds:
-      - bun run build:all
+      - turbo run build
 
   lint:
     desc: Lint all packages (TypeScript + Solidity)
     dir: '{{.ROOT_DIR}}'
     cmds:
-      - bun run lint
+      - turbo run lint
+      - sherif
       - task: contracts:lint

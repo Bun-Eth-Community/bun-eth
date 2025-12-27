@@ -15,6 +15,7 @@
     "@bun-eth/burner-connector": "workspace:*",
     "@bun-eth/components": "workspace:*",
     "@bun-eth/core": "workspace:*",
+    "@bun-eth/env": "workspace:*",
     "@bun-eth/hooks": "workspace:*",
     "@bun-eth/sdk": "workspace:*",
     "@radix-ui/react-avatar": "^1.0.4",

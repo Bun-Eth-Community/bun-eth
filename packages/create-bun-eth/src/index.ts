@@ -8,6 +8,24 @@ import degit from "degit";
 
 const REPO_PATH = "Bun-Eth-Community/bun-eth";
 
+// Published packages that should be installed from npm instead of copied
+const PUBLISHED_PACKAGES = [
+  "core",
+  "hooks",
+  "components",
+  "burner-connector",
+  "foundry-deployer",
+  "create-bun-eth",
+];
+
+// Package name to npm package name mapping with latest version
+const NPM_PACKAGES: Record<string, string> = {
+  "@bun-eth/core": "^0.2.0",
+  "@bun-eth/hooks": "^0.2.0",
+  "@bun-eth/components": "^0.2.0",
+  "@bun-eth/burner-connector": "^0.2.0",
+};
+
 type ProjectType = "full-stack" | "backend-only";
 
 interface CliArgs {
@@ -116,14 +134,87 @@ Backend-Only includes:
   `);
 }
 
+async function removePublishedPackages(targetDir: string) {
+  console.log("📦 Removing published packages (will use npm instead)...");
+
+  // Remove published packages - they'll be installed from npm
+  for (const pkg of PUBLISHED_PACKAGES) {
+    const pkgPath = join(targetDir, "packages", pkg);
+    if (existsSync(pkgPath)) {
+      await $`rm -rf ${pkgPath}`;
+    }
+  }
+
+  // Update root package.json workspaces - only keep contracts and sdk
+  const packageJsonPath = join(targetDir, "package.json");
+  const packageJson = await Bun.file(packageJsonPath).json();
+
+  // Remove scripts, turbo.json, and other dev-only files not needed in template
+  await $`rm -rf ${join(targetDir, "scripts")}`;
+  await $`rm -rf ${join(targetDir, ".changeset")}`;
+  await $`rm -rf ${join(targetDir, ".github")}`;
+  await $`rm -rf ${join(targetDir, "tests")}`;
+
+  // Clean up package.json for template
+  delete packageJson.mcp;
+  packageJson.scripts = {
+    dev: "turbo run dev",
+    build: "turbo run build",
+    lint: "turbo run lint && sherif",
+    test: "bun test packages/sdk",
+    clean: "turbo run clean",
+  };
+
+  await Bun.write(packageJsonPath, JSON.stringify(packageJson, null, 2));
+
+  console.log("✅ Published packages removed");
+}
+
+async function updateWorkspaceDependencies(targetDir: string) {
+  console.log("📝 Updating dependencies to use npm packages...");
+
+  // Update web app package.json
+  const webPkgPath = join(targetDir, "apps/web/package.json");
+  if (existsSync(webPkgPath)) {
+    const webPkg = await Bun.file(webPkgPath).json();
+
+    // Replace workspace:* with npm versions for published packages
+    if (webPkg.dependencies) {
+      for (const [name, version] of Object.entries(NPM_PACKAGES)) {
+        if (webPkg.dependencies[name]) {
+          webPkg.dependencies[name] = version;
+        }
+      }
+    }
+
+    await Bun.write(webPkgPath, JSON.stringify(webPkg, null, 2));
+  }
+
+  // Update api app package.json
+  const apiPkgPath = join(targetDir, "apps/api/package.json");
+  if (existsSync(apiPkgPath)) {
+    const apiPkg = await Bun.file(apiPkgPath).json();
+
+    // Replace workspace:* with npm versions for published packages
+    if (apiPkg.dependencies) {
+      for (const [name, version] of Object.entries(NPM_PACKAGES)) {
+        if (apiPkg.dependencies[name]) {
+          apiPkg.dependencies[name] = version;
+        }
+      }
+    }
+
+    await Bun.write(apiPkgPath, JSON.stringify(apiPkg, null, 2));
+  }
+
+  console.log("✅ Dependencies updated to use npm packages");
+}
+
 async function removeBackendOnlyFiles(targetDir: string) {
   console.log("🗑️  Removing frontend packages...");
 
   // Remove frontend-related directories
   await $`rm -rf ${join(targetDir, "apps/web")}`;
-  await $`rm -rf ${join(targetDir, "packages/hooks")}`;
-  await $`rm -rf ${join(targetDir, "packages/components")}`;
-  await $`rm -rf ${join(targetDir, "packages/burner-connector")}`;
 
   // Update root package.json to remove web workspace
   const packageJsonPath = join(targetDir, "package.json");
@@ -181,6 +272,10 @@ async function scaffoldProject(projectName: string, projectType: ProjectType) {
     });
 
     await emitter.clone(targetDir);
+
+    // Remove published packages and use npm instead
+    await removePublishedPackages(targetDir);
+    await updateWorkspaceDependencies(targetDir);
 
     // Remove frontend files if backend-only
     if (!isFullStack) {

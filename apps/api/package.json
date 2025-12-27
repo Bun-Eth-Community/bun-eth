@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@bun-eth/core": "workspace:*",
+    "@bun-eth/env": "workspace:*",
     "elysia": "^1.1.19",
     "ethers": "^6.13.0"
   },

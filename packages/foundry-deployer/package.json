@@ -21,9 +21,9 @@
     "generate": "bun run src/cli.ts"
   },
   "dependencies": {
-    "viem": "^2.7.8",
     "glob": "^10.3.10",
-    "prettier": "^3.2.4"
+    "prettier": "^3.2.4",
+    "viem": "^2.7.8"
   },
   "devDependencies": {
     "@types/node": "^20.11.5",
