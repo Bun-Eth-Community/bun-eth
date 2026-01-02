@@ -7,7 +7,6 @@ import {
   Balance,
   BurnerWalletInfo,
   FaucetButton,
-  NetworksDropdown,
 } from '@bun-eth/components';
 import { useAccount, useBlockNumber } from 'wagmi';
 
@@ -29,7 +28,6 @@ export default function Home() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <NetworksDropdown />
             <WalletConnect />
           </div>
         </div>
