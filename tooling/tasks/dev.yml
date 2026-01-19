@@ -1,6 +1,30 @@
 version: '3'
 
 tasks:
+  local:
+    desc: Start local development stack using bun (no Docker)
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - mkdir -p .task
+      - anvil --host 0.0.0.0 --port {{.ANVIL_PORT}} > .task/anvil.log 2>&1 & echo $! > .task/anvil.pid
+      - sleep 1
+      - cd apps/api && bun run src/index.ts > ../../.task/api.log 2>&1 & echo $! > .task/api.pid
+      - sleep 1
+      - cd apps/web && bun run dev > ../../.task/web.log 2>&1 & echo $! > .task/web.pid
+      - sleep 2
+      - echo "Started services - Web:{{.WEB_PORT}} API:{{.API_PORT}} Anvil:{{.ANVIL_PORT}}"
+      - echo "Stop with 'task dev:local:down' | Logs with 'task dev:logs:*'"
+
+  local:down:
+    desc: Stop local development stack
+    dir: '{{.ROOT_DIR}}'
+    cmds:
+      - pkill -f "anvil.*--port {{.ANVIL_PORT}}" || true
+      - pkill -f "bun run src/index.ts" || true
+      - pkill -f "bun run dev" || true
+      - rm -f .task/*.pid .task/*.log
+      - echo "Stopped"
+
   up:
     desc: Start local development stack (Web UI + API + Anvil node)
     dir: '{{.ROOT_DIR}}'
@@ -23,12 +47,6 @@ tasks:
       - echo "View logs with task dev:logs:web, task dev:logs:api, or task dev:logs:anvil"
       - echo ""
       - echo "Health check at http://localhost:{{.API_PORT}}/health"
-
-  auto-ports:
-    desc: Automatically find and configure free ports
-    dir: '{{.ROOT_DIR}}'
-    cmds:
-      - bash scripts/auto-port-setup.sh
 
   down:
     desc: Stop local development stack
@@ -53,13 +71,23 @@ tasks:
     desc: View API logs
     dir: '{{.ROOT_DIR}}'
     cmds:
-      - docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f api
+      - |
+        if [ -f .task/api.log ]; then
+          tail -f .task/api.log
+        else
+          docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f api
+        fi
 
   logs:anvil:
     desc: View Anvil node logs
     dir: '{{.ROOT_DIR}}'
     cmds:
-      - docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f anvil
+      - |
+        if [ -f .task/anvil.log ]; then
+          tail -f .task/anvil.log
+        else
+          docker compose -f {{.DOCKER_COMPOSE_FILE}} logs -f anvil
+        fi
 
   logs:web:
     desc: View Web UI logs
@@ -70,7 +98,7 @@ tasks:
           tail -f .task/web.log
         else
           echo "Web dev server is not running or log file not found"
-          echo "Start it with: task dev:up"
+          echo "Start it with: task dev:local or task dev:up"
         fi
 
   restart:

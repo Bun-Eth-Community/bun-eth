@@ -111,7 +111,6 @@ task setup              # Complete setup with tests
 task dev:up             # Start development stack
 task dev:down           # Stop services
 task dev:logs           # View all logs
-task dev:auto-ports     # Find and configure free ports
 
 # Contracts
 task contracts:compile  # Compile smart contracts
@@ -198,12 +197,7 @@ By default, services use these ports:
 - API: `3001`
 - Anvil: `8545`
 
-If ports are in use, run:
-```bash
-task dev:auto-ports
-```
-
-This will automatically find free ports and update your `.env` file.
+If ports are in use, update the port values in your `.env` file.
 
 ## Environment Variables
 

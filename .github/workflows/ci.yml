@@ -22,7 +22,14 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
 
       - name: Install dependencies
-        run: bun install
+        run: |
+          set -o pipefail
+          bun install 2>&1 | tee install.log
+          if grep -q "incorrect peer dependency" install.log; then
+            echo "::error::Peer dependency warnings detected"
+            cat install.log | grep "incorrect peer dependency"
+            exit 1
+          fi
 
       - name: Run tests
         run: bun test
@@ -69,7 +76,14 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
 
       - name: Install dependencies
-        run: bun install
+        run: |
+          set -o pipefail
+          bun install 2>&1 | tee install.log
+          if grep -q "incorrect peer dependency" install.log; then
+            echo "::error::Peer dependency warnings detected"
+            cat install.log | grep "incorrect peer dependency"
+            exit 1
+          fi
 
       - name: Run TypeScript lint
         run: bun run lint

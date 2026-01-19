@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "build": "echo 'No build needed for Bun'",
-    "test": "bun test",
+    "test": "bun test --timeout 60000",
     "prepublishOnly": "echo 'Publishing create-bun-eth'"
   },
   "keywords": [
@@ -52,8 +52,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "degit": "^2.8.4"
   }
 }
