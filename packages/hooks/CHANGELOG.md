@@ -1,5 +1,22 @@
 # @bun-eth/hooks
 
+## 0.2.2
+
+### Patch Changes
+
+- fix: update dependencies and improve quality gates
+
+  - Update Radix UI packages to React 19 compatible versions
+  - Fix workspace:\* references in published packages (use npm versions)
+  - Add test for verifying public packages are usable from npm
+  - Add proper timeouts to create-bun-eth tests
+  - Rename Playwright tests to .playwright.ts to avoid conflicts with Bun test runner
+  - Fix Next.js build by using dynamic import for wagmi-dependent components
+
+- 5a70aea: 1. tooling/env Package
+- Updated dependencies [5a70aea]
+  - @bun-eth/core@0.2.1
+
 ## 0.2.1
 
 ### Patch Changes

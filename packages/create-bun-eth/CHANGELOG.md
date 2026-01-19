@@ -1,5 +1,22 @@
 # create-bun-eth
 
+## 1.0.0
+
+### Major Changes
+
+- 5a70aea: 1. tooling/env Package
+
+### Patch Changes
+
+- fix: update dependencies and improve quality gates
+
+  - Update Radix UI packages to React 19 compatible versions
+  - Fix workspace:\* references in published packages (use npm versions)
+  - Add test for verifying public packages are usable from npm
+  - Add proper timeouts to create-bun-eth tests
+  - Rename Playwright tests to .playwright.ts to avoid conflicts with Bun test runner
+  - Fix Next.js build by using dynamic import for wagmi-dependent components
+
 ## 0.4.1
 
 ### Patch Changes

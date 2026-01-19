@@ -1,5 +1,11 @@
 # @bun-eth/foundry-deployer
 
+## 0.2.2
+
+### Patch Changes
+
+- 5a70aea: 1. tooling/env Package
+
 ## 0.2.1
 
 ### Patch Changes
@@ -11,6 +17,7 @@
   ## Major Features
 
   ### Comprehensive E2E Testing Suite
+
   - Multi-layer testing: Visual Regression, Accessibility, Performance, Responsive
   - WCAG 2.1 AA compliance testing with axe-core
   - Performance metrics: FP, FCP, LCP, bundle size tracking
@@ -19,12 +26,14 @@
   - Time manipulation for blockchain testing
 
   ### Developer Experience Improvements
+
   - Enhanced deployment script with rich console output
   - Centralized .env management with comprehensive documentation
   - Forge lint integration with auto-formatting
   - Comprehensive documentation (E2E guide, improvements summary)
 
   ### New Task Commands
+
   - `test:e2e:complete` - Run complete E2E test suite
   - `test:e2e:visual` - Visual regression testing
   - `test:e2e:accessibility` - WCAG 2.1 AA compliance testing
@@ -35,6 +44,7 @@
   - `contracts:format` - Format Solidity files
 
   ### Template Files Added
+
   - `apps/web/e2e/` - Complete E2E test suite (6 test files)
   - `apps/web/playwright.screenshots.config.ts` - Separate config (no webServer conflicts)
   - `apps/web/e2e/helpers/mock-wallet.ts` - RPC mocking utilities
@@ -44,6 +54,7 @@
   - `docs/test-results/` - Test report directory
 
   ### Template Files Modified
+
   - `.env.example` - Centralized configuration with documentation
   - `.github/workflows/ci.yml` - Added Solidity linting to CI
   - `README.md` - Updated with E2E testing features
@@ -54,10 +65,12 @@
   - `tooling/tasks/build.yml` - Integrated Solidity linting
 
   ### Dependencies Added to Template
+
   - `@axe-core/playwright@4.10.2` - Accessibility testing library
   - `@biomejs/biome@1.9.4` - Fast linter and formatter (replaces ESLint)
 
   ### Linting Infrastructure
+
   - Replaced Next.js ESLint with Biome for faster, Bun-native linting
   - Added `biome.json` configuration at project root
   - Updated all package lint scripts to use Biome
@@ -65,6 +78,7 @@
   - 10-100x faster than ESLint, better suited for Bun-first projects
 
   ## Testing Results
+
   - ✅ Contract tests: 10/10 passing
   - ✅ Forge lint: All contracts formatted
   - ✅ CI/CD: Updated with Solidity linting
@@ -75,6 +89,7 @@
   New projects created with `bunx create-bun-eth@latest` will automatically include all new features.
 
   Existing projects can manually adopt these improvements:
+
   1. Install `@axe-core/playwright` in `apps/web`
   2. Copy E2E test files from `apps/web/e2e/`
   3. Copy `playwright.screenshots.config.ts`

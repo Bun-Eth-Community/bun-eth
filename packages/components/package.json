@@ -1,6 +1,6 @@
 {
   "name": "@bun-eth/components",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Reusable Web3 UI components for Bun-Eth",
   "main": "./src/index.ts",
   "module": "./src/index.ts",
@@ -18,9 +18,9 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@bun-eth/burner-connector": "^0.2.0",
-    "@bun-eth/core": "^0.2.0",
-    "@bun-eth/hooks": "^0.2.0",
+    "@bun-eth/burner-connector": "^0.2.1",
+    "@bun-eth/core": "^0.2.1",
+    "@bun-eth/hooks": "^0.2.2",
     "clsx": "^2.1.0",
     "tailwind-merge": "^2.2.0",
     "viem": "^2.7.8",

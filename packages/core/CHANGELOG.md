@@ -1,5 +1,11 @@
 # @bun-eth/core
 
+## 0.2.1
+
+### Patch Changes
+
+- 5a70aea: 1. tooling/env Package
+
 ## 0.2.0
 
 ### Minor Changes
