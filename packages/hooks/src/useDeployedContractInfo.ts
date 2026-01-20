@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { usePublicClient } from "wagmi";
 import type { Abi, Address } from "viem";
-import type { DeployedContractInfo, ContractName } from "./types";
+import { logger } from "@bun-eth/core";
+import type { DeployedContractInfo, ContractName, DeployedContracts } from "./types";
+
+const contractLogger = logger.child("contracts");
 
 /**
  * Gets the deployed contract info from the generated deployments file
@@ -17,12 +20,10 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(
   useEffect(() => {
     const loadContract = async () => {
       try {
-        // TODO: Load from generated deployedContracts.ts
-        // For now, return undefined - will be implemented with hot reload system
         const chainId = publicClient?.chain?.id;
 
         if (!chainId) {
-          console.warn("Chain ID not available");
+          contractLogger.debug("Chain ID not available yet");
           return;
         }
 
@@ -31,11 +32,12 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(
         const deployedContracts = await import("../../contracts/deployedContracts").catch(() => null);
 
         if (!deployedContracts) {
-          console.warn("No deployed contracts found");
+          contractLogger.debug("No deployed contracts file found");
           return;
         }
 
-        const contract = (deployedContracts.default as any)?.[chainId]?.[contractName];
+        const contracts = deployedContracts.default as DeployedContracts | undefined;
+        const contract = contracts?.[chainId]?.[contractName];
 
         if (contract) {
           // Verify contract is deployed by checking bytecode
@@ -47,11 +49,11 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(
               abi: contract.abi as Abi,
             });
           } else {
-            console.warn(`Contract ${String(contractName)} not deployed at ${contract.address}`);
+            contractLogger.warn(`Contract ${String(contractName)} not deployed at ${contract.address}`);
           }
         }
       } catch (error) {
-        console.error("Error loading deployed contract info:", error);
+        contractLogger.error("Error loading deployed contract info", error);
       }
     };
 

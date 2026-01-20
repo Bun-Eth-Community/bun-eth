@@ -7,7 +7,7 @@ import type { Abi } from "viem";
 type UseScaffoldReadConfig = {
   contractName: ContractName;
   functionName: string;
-  args?: any[];
+  args?: readonly unknown[];
   watch?: boolean;
 };
 

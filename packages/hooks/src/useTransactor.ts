@@ -1,6 +1,11 @@
 import { useCallback } from "react";
 import { usePublicClient } from "wagmi";
+import { logger } from "@bun-eth/core";
 import type { TransactorFuncOptions } from "./types";
+
+type TransactionFn = () => Promise<`0x${string}`>;
+
+const txLogger = logger.child("transactor");
 
 /**
  * Wraps transaction execution with notifications and confirmation tracking
@@ -11,14 +16,14 @@ export const useTransactor = (options?: TransactorFuncOptions) => {
   const publicClient = usePublicClient();
 
   const transactor = useCallback(
-    async <T extends (...args: any[]) => Promise<`0x${string}`>>(
-      transaction: T,
+    async (
+      transaction: TransactionFn,
       transactionOptions?: TransactorFuncOptions
     ): Promise<`0x${string}` | undefined> => {
       try {
         const txHash = await transaction();
 
-        console.log("📝 Transaction sent:", txHash);
+        txLogger.debug("Transaction sent", { hash: txHash });
 
         // Wait for confirmation
         const receipt = await publicClient?.waitForTransactionReceipt({
@@ -26,16 +31,15 @@ export const useTransactor = (options?: TransactorFuncOptions) => {
           confirmations: transactionOptions?.blockConfirmations || options?.blockConfirmations || 1,
         });
 
-        console.log("✅ Transaction confirmed:", receipt);
+        txLogger.debug("Transaction confirmed", { hash: txHash, blockNumber: receipt?.blockNumber });
 
         // Call callback if provided
-        if (transactionOptions?.onBlockConfirmation || options?.onBlockConfirmation) {
-          (transactionOptions?.onBlockConfirmation || options?.onBlockConfirmation)?.(receipt);
-        }
+        const onConfirmation = transactionOptions?.onBlockConfirmation || options?.onBlockConfirmation;
+        onConfirmation?.(receipt);
 
         return txHash;
       } catch (error) {
-        console.error("❌ Transaction failed:", error);
+        txLogger.error("Transaction failed", error);
         throw error;
       }
     },

@@ -1,11 +1,12 @@
 import { useWatchContractEvent } from "wagmi";
+import type { Log } from "viem";
 import { useDeployedContractInfo } from "./useDeployedContractInfo";
 import type { ContractName } from "./types";
 
 type UseScaffoldWatchContractEventConfig = {
   contractName: ContractName;
   eventName: string;
-  onLogs: (logs: any[]) => void;
+  onLogs: (logs: Log[]) => void;
   enabled?: boolean;
 };
 

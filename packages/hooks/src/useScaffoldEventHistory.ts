@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { usePublicClient } from "wagmi";
+import type { Log } from "viem";
+import { logger } from "@bun-eth/core";
 import { useDeployedContractInfo } from "./useDeployedContractInfo";
 import type { ContractName } from "./types";
+
+const eventLogger = logger.child("events");
 
 /**
  * Fetches historical events for a contract with batching to prevent RPC overload
@@ -15,7 +19,7 @@ export const useScaffoldEventHistory = (
   eventName: string,
   fromBlock: bigint = 0n
 ) => {
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<Log[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const deployedContractInfo = useDeployedContractInfo(contractName);
   const publicClient = usePublicClient();
@@ -35,7 +39,7 @@ export const useScaffoldEventHistory = (
 
         setEvents(logs);
       } catch (error) {
-        console.error("Error fetching events:", error);
+        eventLogger.error("Error fetching events:", error);
       } finally {
         setIsLoading(false);
       }

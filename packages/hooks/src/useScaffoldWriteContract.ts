@@ -21,7 +21,7 @@ export const useScaffoldWriteContract = (contractName: ContractName) => {
 
   const writeContractAsyncWithNotifications = async (
     functionName: string,
-    args?: any[],
+    args?: readonly unknown[],
     value?: bigint
   ) => {
     if (!deployedContractInfo) {
