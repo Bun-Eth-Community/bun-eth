@@ -3,6 +3,9 @@
  * Inspired by Scaffold-ETH 2's hook architecture
  */
 
+// Provider for contracts configuration
+export { ContractsProvider, useContracts, type ContractsProviderProps } from "./ContractsProvider";
+
 // Contract interaction hooks
 export { useDeployedContractInfo } from "./useDeployedContractInfo";
 export { useScaffoldContract } from "./useScaffoldContract";

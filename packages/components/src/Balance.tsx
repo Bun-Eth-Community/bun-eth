@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useWatchBalance } from "@bun-eth/hooks";
 import { formatEther } from "viem";
 import type { Address } from "viem";
+import { useMounted } from "./useMounted";
 
 export type BalanceProps = {
   address?: Address;
@@ -12,12 +13,13 @@ export type BalanceProps = {
 /**
  * Displays wallet balance with optional USD conversion
  */
-export const Balance = ({ address, className = "", usdMode = false }: BalanceProps) => {
+export const Balance = memo(function Balance({ address, className = "", usdMode = false }: BalanceProps) {
+  const mounted = useMounted();
   const [showUsd, setShowUsd] = useState(usdMode);
   const { data: balance, isLoading, isError } = useWatchBalance(address);
 
-  if (isLoading) {
-    return <div className={`animate-pulse ${className}`}>Loading...</div>;
+  if (!mounted || isLoading) {
+    return <div className={`animate-pulse bg-gray-200 h-6 w-24 rounded ${className}`} />;
   }
 
   if (isError || !balance) {
@@ -45,4 +47,4 @@ export const Balance = ({ address, className = "", usdMode = false }: BalancePro
       </button>
     </div>
   );
-};
+});

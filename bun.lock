@@ -8,6 +8,7 @@
         "@changesets/cli": "^2.29.7",
         "@types/bun": "^1.1.10",
         "sherif": "^1.1.0",
+        "tsup": "^8.5.1",
         "turbo": "^2.5.3",
         "typescript": "^5.6.2",
       },
@@ -31,6 +32,7 @@
       "dependencies": {
         "@bun-eth/burner-connector": "workspace:*",
         "@bun-eth/components": "workspace:*",
+        "@bun-eth/contracts": "workspace:*",
         "@bun-eth/core": "workspace:*",
         "@bun-eth/env": "workspace:*",
         "@bun-eth/hooks": "workspace:*",
@@ -72,24 +74,24 @@
     },
     "packages/burner-connector": {
       "name": "@bun-eth/burner-connector",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "dependencies": {
         "viem": "^2.7.8",
         "wagmi": "^2.16.4",
       },
       "devDependencies": {
         "@types/node": "^20.11.5",
-        "tsup": "^8.0.1",
+        "tsup": "^8.5.1",
         "typescript": "^5.6.2",
       },
     },
     "packages/components": {
       "name": "@bun-eth/components",
-      "version": "0.2.1",
+      "version": "0.2.3",
       "dependencies": {
-        "@bun-eth/burner-connector": "^0.2.0",
-        "@bun-eth/core": "^0.2.0",
-        "@bun-eth/hooks": "^0.2.0",
+        "@bun-eth/burner-connector": "^0.2.1",
+        "@bun-eth/core": "^0.2.1",
+        "@bun-eth/hooks": "^0.2.3",
         "clsx": "^2.1.0",
         "tailwind-merge": "^2.2.0",
         "viem": "^2.7.8",
@@ -98,7 +100,7 @@
       "devDependencies": {
         "@types/react": "^19.0.0",
         "@types/react-dom": "^19.0.0",
-        "tsup": "^8.0.1",
+        "tsup": "^8.5.1",
         "typescript": "^5.6.2",
       },
       "peerDependencies": {
@@ -112,20 +114,25 @@
     },
     "packages/core": {
       "name": "@bun-eth/core",
-      "version": "0.2.0",
+      "version": "0.2.1",
+      "devDependencies": {
+        "@types/node": "^25.0.9",
+        "tsup": "^8.5.1",
+        "typescript": "^5.6.2",
+      },
     },
     "packages/create-bun-eth": {
       "name": "create-bun-eth",
-      "version": "0.4.1",
+      "version": "1.0.0",
       "bin": {
         "create-bun-eth": "./src/index.ts",
       },
     },
     "packages/foundry-deployer": {
       "name": "@bun-eth/foundry-deployer",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "bin": {
-        "foundry-deployer": "./src/cli.ts",
+        "foundry-deployer": "./dist/cli.mjs",
       },
       "dependencies": {
         "glob": "^10.3.10",
@@ -134,22 +141,22 @@
       },
       "devDependencies": {
         "@types/node": "^20.11.5",
-        "tsup": "^8.0.1",
+        "tsup": "^8.5.1",
         "typescript": "^5.6.2",
       },
     },
     "packages/hooks": {
       "name": "@bun-eth/hooks",
-      "version": "0.2.1",
+      "version": "0.2.3",
       "dependencies": {
-        "@bun-eth/core": "^0.2.0",
+        "@bun-eth/core": "^0.2.1",
         "@tanstack/react-query": "^5.17.19",
         "viem": "^2.7.8",
         "wagmi": "^2.16.4",
       },
       "devDependencies": {
         "@types/react": "^19.0.0",
-        "tsup": "^8.0.1",
+        "tsup": "^8.5.1",
         "typescript": "^5.6.2",
       },
       "peerDependencies": {
@@ -2114,6 +2121,8 @@
 
     "@base-org/account/zustand": ["zustand@5.0.3", "", { "peerDependencies": { "@types/react": ">=18.0.0", "immer": ">=9.0.6", "react": ">=18.0.0", "use-sync-external-store": ">=1.2.0" }, "optionalPeers": ["@types/react", "immer", "react", "use-sync-external-store"] }, "sha512-14fwWQtU3pH4dE0dOpdMiWjddcH+QzKIgk1cl8epwSE7yag43k/AD/m4L6+K7DytAOr9gGBe3/EXj9g7cdostg=="],
 
+    "@bun-eth/core/@types/node": ["@types/node@25.0.9", "", { "dependencies": { "undici-types": "~7.16.0" } }, "sha512-/rpCXHlCWeqClNBwUhDcusJxXYDjZTyE8v5oTO7WbL8eij2nKhUeU89/6xgjU7N4/Vh3He0BtyhJdQbDyhiXAw=="],
+
     "@changesets/apply-release-plan/prettier": ["prettier@2.8.8", "", { "bin": { "prettier": "bin-prettier.js" } }, "sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q=="],
 
     "@changesets/write/prettier": ["prettier@2.8.8", "", { "bin": { "prettier": "bin-prettier.js" } }, "sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q=="],
@@ -2513,6 +2522,8 @@
     "@base-org/account/ox/@noble/curves": ["@noble/curves@1.9.7", "", { "dependencies": { "@noble/hashes": "1.8.0" } }, "sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw=="],
 
     "@base-org/account/ox/@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
+
+    "@bun-eth/core/@types/node/undici-types": ["undici-types@7.16.0", "", {}, "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw=="],
 
     "@coinbase/wallet-sdk/ox/@adraffy/ens-normalize": ["@adraffy/ens-normalize@1.11.1", "", {}, "sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ=="],
 

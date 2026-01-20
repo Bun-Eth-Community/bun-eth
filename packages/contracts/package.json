@@ -2,6 +2,20 @@
   "name": "@bun-eth/contracts",
   "version": "0.1.0",
   "private": true,
+  "main": "./deployedContracts.ts",
+  "types": "./deployedContracts.ts",
+  "exports": {
+    ".": {
+      "bun": "./deployedContracts.ts",
+      "import": "./deployedContracts.ts",
+      "require": "./deployedContracts.ts"
+    },
+    "./deployedContracts": {
+      "bun": "./deployedContracts.ts",
+      "import": "./deployedContracts.ts",
+      "require": "./deployedContracts.ts"
+    }
+  },
   "scripts": {
     "compile": "forge build",
     "deploy": "forge script script/Deploy.s.sol:DeployScript --rpc-url http://localhost:${ANVIL_PORT:-3002} --broadcast --legacy",

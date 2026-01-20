@@ -1,16 +1,26 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useSwitchChain, useAccount } from "wagmi";
 import { mainnet, sepolia, localhost } from "wagmi/chains";
+import { useMounted } from "./useMounted";
 
 const networks = [mainnet, sepolia, localhost];
 
 /**
  * Dropdown to switch between configured networks
  */
-export const NetworksDropdown = () => {
+export const NetworksDropdown = memo(function NetworksDropdown() {
+  const mounted = useMounted();
   const [isOpen, setIsOpen] = useState(false);
   const { chain } = useAccount();
   const { switchChain } = useSwitchChain();
+
+  if (!mounted) {
+    return (
+      <div className="px-4 py-2 bg-gray-100 rounded-md animate-pulse">
+        <div className="h-5 w-24 bg-gray-200 rounded" />
+      </div>
+    );
+  }
 
   const handleSwitch = (chainId: number) => {
     switchChain({ chainId: chainId as any });
@@ -58,4 +68,4 @@ export const NetworksDropdown = () => {
       )}
     </div>
   );
-};
+});

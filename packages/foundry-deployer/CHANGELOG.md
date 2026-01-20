@@ -1,5 +1,15 @@
 # @bun-eth/foundry-deployer
 
+## 0.3.0
+
+### Minor Changes
+
+- Build system overhaul and SSR fixes:
+  - Add tsup build with dual CJS/ESM exports for npm compatibility
+  - Add ContractsProvider for configurable contract imports
+  - Add SSR protection to all wagmi-dependent components
+  - Add proper TypeScript declarations
+
 ## 0.2.2
 
 ### Patch Changes

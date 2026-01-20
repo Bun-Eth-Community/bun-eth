@@ -2,6 +2,7 @@ import { memo, useCallback, useState } from "react";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 import { parseEther, type Address } from "viem";
 import { localhost } from "viem/chains";
+import { useMounted } from "./useMounted";
 
 export type FaucetProps = {
   onClose: () => void;
@@ -17,6 +18,7 @@ type FaucetStatus = "idle" | "loading" | "success" | "error";
  * Sends test ETH to any address
  */
 export const Faucet = memo(function Faucet({ onClose }: FaucetProps) {
+  const mounted = useMounted();
   const [address, setAddress] = useState<string>("");
   const [amount, setAmount] = useState<string>("1");
   const [status, setStatus] = useState<FaucetStatus>("idle");
@@ -65,6 +67,18 @@ export const Faucet = memo(function Faucet({ onClose }: FaucetProps) {
       setStatus("error");
     }
   }, [walletClient, isLocalNetwork, address, amount, publicClient, onClose]);
+
+  if (!mounted) {
+    return (
+      <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md animate-pulse">
+        <div className="h-7 w-32 bg-gray-200 dark:bg-gray-700 rounded mb-4" />
+        <div className="space-y-4">
+          <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded" />
+          <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded" />
+        </div>
+      </div>
+    );
+  }
 
   if (!isLocalNetwork) {
     return (

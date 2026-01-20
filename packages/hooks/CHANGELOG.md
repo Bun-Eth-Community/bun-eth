@@ -1,5 +1,20 @@
 # @bun-eth/hooks
 
+## 0.3.0
+
+### Minor Changes
+
+- Build system overhaul and SSR fixes:
+  - Add tsup build with dual CJS/ESM exports for npm compatibility
+  - Add ContractsProvider for configurable contract imports
+  - Add SSR protection to all wagmi-dependent components
+  - Add proper TypeScript declarations
+
+### Patch Changes
+
+- Updated dependencies
+  - @bun-eth/core@0.3.0
+
 ## 0.2.3
 
 ### Patch Changes

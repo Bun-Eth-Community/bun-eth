@@ -3,6 +3,7 @@ import { useAccount, useEnsName } from "wagmi";
 import type { Address as AddressType } from "viem";
 import { mainnet } from "viem/chains";
 import { BlockieAvatar } from "./BlockieAvatar";
+import { useMounted } from "./useMounted";
 
 export type AddressProps = {
   address?: AddressType;
@@ -22,6 +23,7 @@ export const Address = memo(function Address({
   size = "base",
   onCopy,
 }: AddressProps) {
+  const mounted = useMounted();
   const [isCopied, setIsCopied] = useState(false);
   const { chain } = useAccount();
 
@@ -48,6 +50,10 @@ export const Address = memo(function Address({
       setTimeout(() => setIsCopied(false), 2000);
     }
   }, [address, onCopy]);
+
+  if (!mounted) {
+    return <div className={`animate-pulse bg-gray-200 h-6 w-32 rounded`} />;
+  }
 
   if (!address) {
     return <span className="text-gray-400">No address</span>;

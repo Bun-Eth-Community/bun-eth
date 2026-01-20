@@ -1,6 +1,6 @@
-import { createConnector } from "wagmi";
+import { createConnector, type CreateConnectorFn } from "wagmi";
 import { privateKeyToAccount } from "viem/accounts";
-import type { Address, Chain, Client, Transport } from "viem";
+import type { Address } from "viem";
 import { getBurnerPrivateKey } from "./storage";
 import type { BurnerWalletOptions } from "./types";
 
@@ -13,7 +13,7 @@ const DEFAULT_OPTIONS: Required<BurnerWalletOptions> = {
  * Burner wallet connector for wagmi
  * Creates an ephemeral wallet stored in localStorage for quick testing
  */
-export function burnerWalletConnector(options: BurnerWalletOptions = {}) {
+export function burnerWalletConnector(options: BurnerWalletOptions = {}): CreateConnectorFn {
   const walletConfig = { ...DEFAULT_OPTIONS, ...options };
 
   return createConnector((config) => ({

@@ -1,15 +1,32 @@
 import { useState } from "react";
 import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import type { TransactionReceipt } from "viem";
 import { useDeployedContractInfo } from "./useDeployedContractInfo";
 import { useTransactor } from "./useTransactor";
 import type { ContractName } from "./types";
+
+export interface UseScaffoldWriteContractResult {
+  writeContractAsync: (
+    functionName: string,
+    args?: readonly unknown[],
+    value?: bigint
+  ) => Promise<`0x${string}` | undefined>;
+  isMining: boolean;
+  txReceipt: TransactionReceipt | undefined;
+  txHash: `0x${string}` | undefined;
+  isPending: boolean;
+  isSuccess: boolean;
+  isError: boolean;
+  error: Error | null;
+  reset: () => void;
+}
 
 /**
  * Wrapper around wagmi's useWriteContract with integrated transaction notifications
  * @param contractName - name of the contract to interact with
  * @returns write contract functions with mining state tracking
  */
-export const useScaffoldWriteContract = (contractName: ContractName) => {
+export function useScaffoldWriteContract(contractName: ContractName): UseScaffoldWriteContractResult {
   const [isMining, setIsMining] = useState(false);
   const deployedContractInfo = useDeployedContractInfo(contractName);
   const { writeContractAsync, data: txHash, ...writeContractProps } = useWriteContract();
@@ -52,6 +69,10 @@ export const useScaffoldWriteContract = (contractName: ContractName) => {
     isMining,
     txReceipt,
     txHash,
-    ...writeContractProps,
+    isPending: writeContractProps.isPending,
+    isSuccess: writeContractProps.isSuccess,
+    isError: writeContractProps.isError,
+    error: writeContractProps.error,
+    reset: writeContractProps.reset,
   };
-};
+}

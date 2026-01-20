@@ -1,7 +1,8 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useState } from "react";
 import { useAccount } from "wagmi";
 import { localhost } from "viem/chains";
 import { generateBurnerWallet, clearBurnerWallet, getBurnerPrivateKey } from "@bun-eth/burner-connector";
+import { useMounted } from "./useMounted";
 
 // Local development chain IDs (Anvil, Hardhat, Ganache)
 const LOCAL_CHAIN_IDS = [localhost.id, 1337];
@@ -11,6 +12,7 @@ const LOCAL_CHAIN_IDS = [localhost.id, 1337];
  * Only displays when connected to burner wallet on local network
  */
 export const BurnerWalletInfo = memo(function BurnerWalletInfo() {
+  const mounted = useMounted();
   const { connector, chain } = useAccount();
   const [showPrivateKey, setShowPrivateKey] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -18,7 +20,8 @@ export const BurnerWalletInfo = memo(function BurnerWalletInfo() {
   const isBurner = connector?.id === "burner-wallet";
   const isLocalNetwork = chain?.id ? LOCAL_CHAIN_IDS.includes(chain.id) : false;
 
-  if (!isBurner || !isLocalNetwork) {
+  // SSR protection and conditional rendering
+  if (!mounted || !isBurner || !isLocalNetwork) {
     return null;
   }
 
