@@ -7,7 +7,11 @@
     "declarationMap": true,
     "jsx": "react-jsx",
     "lib": ["ESNext", "DOM"],
-    "types": []
+    "types": [],
+    "baseUrl": ".",
+    "paths": {
+      "@bun-eth/core": ["../core/dist/index.d.ts"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx"]
