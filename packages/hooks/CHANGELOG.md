@@ -1,5 +1,11 @@
 # @bun-eth/hooks
 
+## 0.2.3
+
+### Patch Changes
+
+- React performance optimizations: memoization, proper viem types, logger integration
+
 ## 0.2.2
 
 ### Patch Changes
